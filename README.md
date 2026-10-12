@@ -36,9 +36,9 @@ Open `http://localhost:3000/admin` and create the first admin user. Without R2 s
 ## Deploy (all free plans)
 
 1. **Neon** – create a project; copy the pooled connection string into `DATABASE_URL`.
-2. **Cloudflare R2** – create a bucket, turn on public access (r2.dev or a custom domain like `media.giantability.com`), and create an API token with Object Read & Write on the bucket. Add a CORS rule so the magazine reader can load PDFs:
+2. **Cloudflare R2** – create a bucket, turn on public access (r2.dev or a custom domain like `media.giantability.com`), and create an API token with Object Read & Write on the bucket. Add a CORS rule so the admin can upload files straight to R2 (PUT) and the magazine reader can load PDFs (GET):
    ```json
-   [{ "AllowedOrigins": ["https://giantability.com"], "AllowedMethods": ["GET", "HEAD"], "AllowedHeaders": ["*"] }]
+   [{ "AllowedOrigins": ["https://giantability-web.vercel.app", "https://giantability.com"], "AllowedMethods": ["GET", "HEAD", "PUT"], "AllowedHeaders": ["*"] }]
    ```
 3. **Resend** – verify the sending domain and create an API key.
 4. **Vercel** – import this repo, add every variable from `.env.example`, deploy. On the first start the database tables are created (`src/migrations`) and the starting content is added: the five blog categories and the Partner page wording (`src/lib/defaults.ts`). The daily job is set in `vercel.json`.
@@ -47,6 +47,14 @@ Open `http://localhost:3000/admin` and create the first admin user. Without R2 s
 ### About Vercel Hobby
 
 Vercel's Hobby plan is for non-commercial use, and it allows one scheduled job a day (which is all this site uses). Nothing in the code is tied to Vercel: the same repo deploys to Netlify's free plan (add the daily job as a Netlify scheduled function calling `/api/cron/daily` with the `Authorization: Bearer <CRON_SECRET>` header).
+
+## Regenerating the admin import map
+
+Run it with the R2 variables set (any values), so the direct-to-R2 upload handler stays in the map:
+
+```bash
+R2_BUCKET=x R2_ACCESS_KEY_ID=x R2_SECRET_ACCESS_KEY=x R2_ACCOUNT_ID=x pnpm generate:importmap
+```
 
 ## Making changes to the content model
 

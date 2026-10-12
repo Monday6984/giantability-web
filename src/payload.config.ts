@@ -72,8 +72,14 @@ export default buildConfig({
             }
           : true,
       },
+      // Files go straight from the browser to R2, so large photos and magazine PDFs
+      // are not blocked by Vercel's 4.5 MB request limit. Needs a CORS rule allowing PUT (see README).
+      clientUploads: true,
       bucket: process.env.R2_BUCKET || '',
       config: {
+        // Only send checksums when required; keeps uploads compatible with R2.
+        requestChecksumCalculation: 'WHEN_REQUIRED',
+        responseChecksumValidation: 'WHEN_REQUIRED',
         endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
         region: 'auto',
         credentials: {
