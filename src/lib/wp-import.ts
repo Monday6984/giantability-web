@@ -4,7 +4,7 @@
  * converted from WordPress HTML to the editor's format. Re-running skips posts already imported.
  */
 import { convertHTMLToLexical, editorConfigFactory } from '@payloadcms/richtext-lexical'
-import { JSDOM } from 'jsdom'
+import { parseHTML } from 'linkedom'
 import path from 'path'
 import type { Payload } from 'payload'
 
@@ -24,6 +24,20 @@ export type ImportResult = {
 }
 
 const MAX_IMAGE_BYTES = 20 * 1024 * 1024
+
+// ---------- HTML parsing ----------
+
+/**
+ * A small stand-in for jsdom's JSDOM class built on linkedom, which is pure JavaScript and works in
+ * serverless functions (jsdom needs extra files at runtime that Vercel deployments don't include).
+ */
+class DOM {
+  window: { document: Document }
+  constructor(html: string) {
+    const page = /<html[\s>]/i.test(html) ? html : `<!doctype html><html><head></head><body>${html.replace(/^\s*<body>|<\/body>\s*$/gi, '')}</body></html>`
+    this.window = parseHTML(page) as unknown as { document: Document }
+  }
+}
 
 // ---------- HTML clean-up ----------
 
@@ -170,7 +184,7 @@ function liftUploads(root: LexNode) {
 const text = (html: string) => {
   // Space out block elements so "<li>One</li><li>Two</li>" reads "One Two".
   const spaced = html.replace(/<\/(p|li|h[1-6]|blockquote|div|figcaption|td|th)>|<br\s*\/?>/gi, '$& ')
-  const dom = new JSDOM(`<body>${spaced}</body>`)
+  const dom = new DOM(spaced)
   return (dom.window.document.body.textContent ?? '').replace(/\s+/g, ' ').trim()
 }
 
@@ -218,7 +232,7 @@ export async function importWordPressPost(payload: Payload, post: WpPost): Promi
   let imagesFailed = 0
 
   // Inline images: download each into Media and point the <img> at it.
-  const dom = new JSDOM(`<body>${cleanWordPressHtml(post.html)}</body>`)
+  const dom = new DOM(cleanWordPressHtml(post.html))
   const doc = dom.window.document
   let firstImageId: number | string | null = null
   for (const img of Array.from(doc.querySelectorAll('img'))) {
@@ -262,7 +276,7 @@ export async function importWordPressPost(payload: Payload, post: WpPost): Promi
 
   editorConfigPromise ??= editorConfigFactory.default({ config: payload.config })
   const editorConfig = await editorConfigPromise
-  const body = convertHTMLToLexical({ editorConfig, html: doc.body.innerHTML, JSDOM })
+  const body = convertHTMLToLexical({ editorConfig, html: doc.body.innerHTML, JSDOM: DOM })
   tidyUploads(body.root as unknown as LexNode)
   liftUploads(body.root as unknown as LexNode)
 
