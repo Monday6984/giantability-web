@@ -61,9 +61,12 @@ R2_BUCKET=x R2_ACCESS_KEY_ID=x R2_SECRET_ACCESS_KEY=x R2_ACCOUNT_ID=x pnpm gener
 Edit the collections in `src/collections`, then:
 
 ```bash
+export R2_BUCKET=x R2_ACCESS_KEY_ID=x R2_SECRET_ACCESS_KEY=x R2_ACCOUNT_ID=x   # storage on, as in production
 pnpm generate:types
 pnpm payload migrate:create <short-name>   # commit the new file in src/migrations
 ```
+
+Always generate with the R2 variables set: the storage adapter adds a column to `media`, and a migration made without it would leave production out of step.
 
 Production applies new migrations automatically on the next start.
 
