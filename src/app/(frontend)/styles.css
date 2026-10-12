@@ -697,9 +697,30 @@ a:hover {
   padding-left: 1.2em;
   margin: 0 0 1.2em;
 }
+/* Images added in the post editor carry fixed width/height attributes;
+   let the height follow the width so they keep their shape at any screen size. */
 .prose img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 1.4em auto;
   border-radius: 8px;
+}
+.prose picture,
+.prose figure {
+  display: block;
+  max-width: 100%;
   margin: 1.4em 0;
+}
+.prose figure img {
+  margin: 0 auto;
+}
+.prose figcaption {
+  margin-top: 8px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
 }
 .tags {
   display: flex;
