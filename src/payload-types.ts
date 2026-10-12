@@ -753,6 +753,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface SiteSetting {
   id: number;
+  defaultsLoaded?: boolean | null;
   /**
    * The big story at the top of the homepage. Empty = the newest post.
    */
@@ -839,6 +840,7 @@ export interface SiteSetting {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  defaultsLoaded?: T;
   featuredPost?: T;
   cadenceLine?: T;
   partnerIntro?: T;

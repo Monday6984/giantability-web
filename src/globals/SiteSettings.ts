@@ -10,6 +10,13 @@ export const SiteSettings: GlobalConfig = {
   access: { read: anyone, update: isLoggedIn },
   fields: [
     {
+      // Set once the starting content has been loaded (src/lib/defaults.ts), so it is never re-added.
+      name: 'defaultsLoaded',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { hidden: true },
+    },
+    {
       type: 'tabs',
       tabs: [
         {

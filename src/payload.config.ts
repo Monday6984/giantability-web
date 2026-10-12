@@ -16,6 +16,7 @@ import { Posts } from './collections/Posts'
 import { Subscribers } from './collections/Subscribers'
 import { Users } from './collections/Users'
 import { SiteSettings } from './globals/SiteSettings'
+import { loadDefaults } from './lib/defaults'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -50,6 +51,14 @@ export default buildConfig({
     prodMigrations: migrations,
   }),
   sharp,
+  // First start on an empty database: add the blog categories and Partner page wording.
+  onInit: async (payload) => {
+    try {
+      await loadDefaults(payload)
+    } catch (err) {
+      payload.logger.error({ err, msg: 'Could not load starting content' })
+    }
+  },
   plugins: [
     s3Storage({
       enabled: r2Configured,

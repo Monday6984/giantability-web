@@ -29,7 +29,6 @@ Needs Node 20.18+ and pnpm, plus a Postgres database (a free Neon database works
 pnpm install
 cp .env.example .env      # fill DATABASE_URL, PAYLOAD_SECRET, NEXT_PUBLIC_SITE_URL=http://localhost:3000
 pnpm dev                  # http://localhost:3000
-pnpm seed                 # categories + Partner page wording (run once)
 ```
 
 Open `http://localhost:3000/admin` and create the first admin user. Without R2 settings, uploads are stored in the `media/` folder.
@@ -42,8 +41,8 @@ Open `http://localhost:3000/admin` and create the first admin user. Without R2 s
    [{ "AllowedOrigins": ["https://giantability.com"], "AllowedMethods": ["GET", "HEAD"], "AllowedHeaders": ["*"] }]
    ```
 3. **Resend** – verify the sending domain and create an API key.
-4. **Vercel** – import this repo, add every variable from `.env.example`, deploy. The database tables are created automatically on the first start (`src/migrations`). The daily job is set in `vercel.json`.
-5. Open `/admin`, create the first admin user, then run `pnpm seed` once from your machine with the production `DATABASE_URL` (or add the categories by hand).
+4. **Vercel** – import this repo, add every variable from `.env.example`, deploy. On the first start the database tables are created (`src/migrations`) and the starting content is added: the five blog categories and the Partner page wording (`src/lib/defaults.ts`). The daily job is set in `vercel.json`.
+5. Open `/admin` and create the first admin user.
 
 ### About Vercel Hobby
 
