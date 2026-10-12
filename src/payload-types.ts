@@ -148,7 +148,10 @@ export interface Post {
    * One or two sentences shown on cards, under the headline and in search results.
    */
   excerpt: string;
-  cover: number | Media;
+  /**
+   * Shown on cards and at the top of the post. Strongly recommended.
+   */
+  cover?: (number | null) | Media;
   body: {
     root: {
       type: string;
@@ -183,6 +186,11 @@ export interface Post {
    * All-time, counted by the site.
    */
   views?: number | null;
+  /**
+   * Set by the WordPress importer. Visitors to this old address are sent to this post.
+   */
+  legacyPath?: string | null;
+  wpId?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -201,6 +209,7 @@ export interface Media {
   alt?: string | null;
   caption?: string | null;
   credit?: string | null;
+  sourceUrl?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -537,6 +546,8 @@ export interface PostsSelect<T extends boolean = true> {
   tags?: T;
   readingTime?: T;
   views?: T;
+  legacyPath?: T;
+  wpId?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -598,6 +609,7 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   credit?: T;
+  sourceUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

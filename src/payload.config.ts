@@ -34,6 +34,10 @@ export default buildConfig({
     components: {
       // The admin home page opens on the Overview: views, top posts, new enquiries.
       beforeDashboard: ['@/components/admin/Overview#Overview'],
+      afterNavLinks: ['@/components/admin/ImportView#ImportNavLink'],
+      views: {
+        wpImport: { Component: '@/components/admin/ImportView#ImportView', path: '/import' },
+      },
       graphics: {
         Logo: '@/components/admin/Brand#Logo',
         Icon: '@/components/admin/Brand#Icon',

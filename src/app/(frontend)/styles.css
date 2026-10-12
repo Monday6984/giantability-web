@@ -808,6 +808,12 @@ a:hover {
 .prose figure img {
   margin: 0 auto;
 }
+.prose .post-image {
+  margin: 1.6em 0;
+}
+.prose .post-image img {
+  margin: 0 auto;
+}
 .prose figcaption {
   margin-top: 8px;
   font-family: var(--font-body);

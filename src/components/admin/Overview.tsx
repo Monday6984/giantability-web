@@ -215,6 +215,7 @@ export async function Overview() {
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <a className="btn btn--style-primary btn--size-medium" href="/admin/collections/posts/create">+ New post</a>
         <a className="btn btn--style-secondary btn--size-medium" href="/admin/collections/issues/create">Upload magazine issue</a>
+        <a className="btn btn--style-secondary btn--size-medium" href="/admin/import">Import from WordPress</a>
         <a className="btn btn--style-secondary btn--size-medium" href="/" target="_blank" rel="noreferrer">View site</a>
       </div>
     </div>

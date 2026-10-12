@@ -1,6 +1,7 @@
 import * as migration_20261012_162433_initial from './20261012_162433_initial';
 import * as migration_20261012_163803_defaults_flag from './20261012_163803_defaults_flag';
 import * as migration_20261012_195852_media_object_key from './20261012_195852_media_object_key';
+import * as migration_20261012_214137_wordpress_import_fields from './20261012_214137_wordpress_import_fields';
 
 export const migrations = [
   {
@@ -16,6 +17,11 @@ export const migrations = [
   {
     up: migration_20261012_195852_media_object_key.up,
     down: migration_20261012_195852_media_object_key.down,
-    name: '20261012_195852_media_object_key'
+    name: '20261012_195852_media_object_key',
+  },
+  {
+    up: migration_20261012_214137_wordpress_import_fields.up,
+    down: migration_20261012_214137_wordpress_import_fields.down,
+    name: '20261012_214137_wordpress_import_fields'
   },
 ];

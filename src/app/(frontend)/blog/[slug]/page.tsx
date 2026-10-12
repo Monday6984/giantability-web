@@ -1,10 +1,10 @@
-import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { AdSlot } from '@/components/site/AdSlot'
 import { EyeIcon } from '@/components/site/Icons'
+import { PostBody } from '@/components/site/PostBody'
 import { PostCard, PostMeta } from '@/components/site/PostCard'
 import { ShareButtons } from '@/components/site/ShareButtons'
 import { TrackPost } from '@/components/site/TrackView'
@@ -94,7 +94,7 @@ export default async function PostPage({ params }: Props) {
         )}
 
         <div className="wrap read prose" style={{ paddingTop: 32 }}>
-          <RichText data={post.body} />
+          <PostBody body={post.body} />
           <div style={{ margin: '2em 0' }}>
             <AdSlot placement="article" />
           </div>

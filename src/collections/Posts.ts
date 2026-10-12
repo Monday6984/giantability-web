@@ -34,7 +34,12 @@ export const Posts: CollectionConfig = {
       maxLength: 280,
       admin: { description: 'One or two sentences shown on cards, under the headline and in search results.' },
     },
-    { name: 'cover', type: 'upload', relationTo: 'media', required: true },
+    {
+      name: 'cover',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Shown on cards and at the top of the post. Strongly recommended.' },
+    },
     { name: 'body', type: 'richText', required: true },
     slugField(),
     {
@@ -59,6 +64,19 @@ export const Posts: CollectionConfig = {
       admin: { position: 'sidebar', description: 'Minutes. Leave empty to estimate from the text.' },
     },
     viewCountField('post', 'Views'),
+    {
+      name: 'legacyPath',
+      label: 'Old WordPress address',
+      type: 'text',
+      index: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Set by the WordPress importer. Visitors to this old address are sent to this post.',
+        condition: (data) => Boolean(data?.legacyPath),
+      },
+    },
+    { name: 'wpId', type: 'text', index: true, admin: { hidden: true } },
   ],
   hooks: {
     beforeChange: [

@@ -21,6 +21,20 @@ Built with **Next.js** and **Payload CMS** (the admin lives inside the same app 
 
 **New-issue emails:** a daily job (`/api/cron/daily`, 08:00 UTC) emails subscribers about a newly released issue, 90 a day, until everyone has had it. Each email has an unsubscribe link.
 
+## Importing posts from WordPress
+
+Admin → **Import from WordPress** (or `/admin/import`, admins only).
+
+1. In WordPress: **Tools → Export → Posts** (or All content) → **Download Export File**.
+2. Choose that `.xml` file on the Import page. It is read in the browser, so large exports are fine.
+3. Click **Import**. Posts are brought in one at a time; keep the tab open until it says *Finished*.
+
+What comes across: title, slug, publish date, excerpt (or one made from the text), body (headings, paragraphs, links, lists, quotes), categories (WordPress "Uncategorized" becomes "General"), tags, author, the featured image and images in the text. Images are downloaded from the old site, so it must still be online. Captions stay with their images, YouTube embeds become links. Drafts are optional and arrive as drafts.
+
+Running it again skips posts already imported, and **Retry failed** re-runs only the ones that failed.
+
+Old addresses keep working: `/2024/05/my-post/`, `/category/news/`, `/tag/x/` and `/feed/` are permanently redirected to the new pages (`src/app/(frontend)/[...legacy]`).
+
 ## Run it locally
 
 Needs Node 20.18+ and pnpm, plus a Postgres database (a free Neon database works, or local Postgres).

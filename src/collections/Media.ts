@@ -22,6 +22,8 @@ export const Media: CollectionConfig = {
     },
     { name: 'caption', type: 'text' },
     { name: 'credit', type: 'text' },
+    // Where an imported image came from, so a re-run of the WordPress import reuses it.
+    { name: 'sourceUrl', type: 'text', index: true, admin: { hidden: true } },
   ],
   upload: {
     mimeTypes: ['image/*', 'application/pdf'],
