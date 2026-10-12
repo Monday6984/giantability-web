@@ -57,13 +57,19 @@ export const Issues: CollectionConfig = {
       name: 'contents',
       label: 'In this issue',
       type: 'array',
-      admin: { description: 'Shown beside the reader; clicking a line jumps to that page.' },
+      admin: { description: 'Shown under the reader; clicking a line jumps to that page.' },
       fields: [
         {
           type: 'row',
           fields: [
             { name: 'section', type: 'text', required: true },
-            { name: 'page', type: 'number', required: true, min: 1 },
+            {
+              name: 'page',
+              type: 'number',
+              required: true,
+              min: 1,
+              admin: { description: "The PDF's own page number. If the PDF is laid out as two-page spreads, each spread counts as one page." },
+            },
           ],
         },
       ],

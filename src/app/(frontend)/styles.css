@@ -777,27 +777,63 @@ a:hover {
 .mag-page .btn {
   color: #fff;
 }
+.reader-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 72px;
+}
+.reader-shell:fullscreen {
+  background: var(--navy);
+  padding: 16px;
+  overflow: auto;
+}
 .reader {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 .reader-stage {
   background: #091320;
   border-radius: 14px;
-  padding: clamp(12px, 3vw, 40px);
+  padding: clamp(8px, 2vw, 24px);
+  min-height: 200px;
+  overflow: auto;
   display: flex;
   justify-content: center;
-  min-height: 420px;
-  align-items: center;
+  align-items: flex-start;
+}
+.reader-stage[data-zoomed='true'] {
+  justify-content: flex-start;
+  max-height: 85vh;
+}
+.reader-shell:fullscreen .reader-stage {
+  max-height: calc(100vh - 170px);
 }
 .spread {
   display: flex;
   justify-content: center;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
   background: #fff;
+  flex: none;
+}
+.spread canvas {
+  display: block;
+}
+.spread-pages {
+  display: flex;
 }
 .reader-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.reader-controls > div {
+  flex: 1 1 120px !important;
+  min-width: 0;
+}
+.reader-tools {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -820,6 +856,9 @@ a:hover {
   font-size: 15px;
   cursor: pointer;
   text-decoration: none;
+}
+.mag-page a.ctl {
+  color: #fff;
 }
 .ctl:hover {
   border-color: #fff;
@@ -844,9 +883,14 @@ a:hover {
 .toc {
   border: 1px solid var(--navy-line);
   border-radius: 14px;
-  padding: 24px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
+  gap: 12px;
+}
+.toc-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
   gap: 6px;
 }
 .toc button {

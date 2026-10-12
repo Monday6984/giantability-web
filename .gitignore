@@ -48,3 +48,6 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# pdf.js assets (copied at build time)
+/public/pdfjs

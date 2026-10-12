@@ -201,7 +201,6 @@ export interface Media {
   alt?: string | null;
   caption?: string | null;
   credit?: string | null;
-  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -290,11 +289,14 @@ export interface Issue {
    */
   pdf: number | Media;
   /**
-   * Shown beside the reader; clicking a line jumps to that page.
+   * Shown under the reader; clicking a line jumps to that page.
    */
   contents?:
     | {
         section: string;
+        /**
+         * The PDF's own page number. If the PDF is laid out as two-page spreads, each spread counts as one page.
+         */
         page: number;
         id?: string | null;
       }[]
@@ -596,7 +598,6 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   credit?: T;
-  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
