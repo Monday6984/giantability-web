@@ -2,21 +2,9 @@
 
 import React, { useRef, useState } from 'react'
 
-type WpPost = {
-  wpId: string
-  title: string
-  slug: string
-  date: string
-  status: string
-  link: string
-  html: string
-  excerpt: string
-  author: string
-  categories: { name: string; slug: string }[]
-  tags: string[]
-  featuredUrl: string | null
-  siteUrl: string
-}
+import type { WpPost } from '@/lib/wp-import-types'
+import { fromRestPost, type RestPost } from '@/lib/wp-rest'
+
 
 type Result = {
   status: 'imported' | 'skipped' | 'failed'
@@ -90,8 +78,34 @@ function parseExport(xml: string): Parsed {
       siteUrl,
     })
   }
-  posts.sort((a, b) => a.date.localeCompare(b.date))
-  return { siteUrl, posts, first: posts[0]?.date ?? '', last: posts.at(-1)?.date ?? '' }
+  return summarise(siteUrl, posts)
+}
+
+/** Reads posts saved from the site's API (…/wp-json/wp/v2/posts?per_page=100&page=1&_embed). */
+function parseJson(text: string): Parsed {
+  let data: unknown
+  try {
+    data = JSON.parse(text)
+  } catch {
+    throw new Error('This .json file could not be read.')
+  }
+  const list = (Array.isArray(data) ? data : (data as { posts?: unknown[] })?.posts) as RestPost[] | undefined
+  if (!Array.isArray(list) || !list.length || !('id' in (list[0] as object))) {
+    throw new Error('No WordPress posts found in this .json file.')
+  }
+  let siteUrl = ''
+  try {
+    siteUrl = new URL(list[0].link ?? '').origin
+  } catch {
+    siteUrl = ''
+  }
+  const posts = list.map((p) => fromRestPost(p, siteUrl))
+  return summarise(siteUrl, posts)
+}
+
+function summarise(siteUrl: string, posts: WpPost[]): Parsed {
+  const unique = Array.from(new Map(posts.map((p) => [p.wpId, p])).values()).sort((a, b) => a.date.localeCompare(b.date))
+  return { siteUrl, posts: unique, first: unique[0]?.date ?? '', last: unique.at(-1)?.date ?? '' }
 }
 
 const fmt = (iso: string) => (iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '')
@@ -107,6 +121,9 @@ const box: React.CSSProperties = {
 export function ImportClient() {
   const [parsed, setParsed] = useState<Parsed | null>(null)
   const [error, setError] = useState('')
+  const [source, setSource] = useState<'site' | 'file'>('site')
+  const [siteInput, setSiteInput] = useState('')
+  const [reading, setReading] = useState('')
   const [includeDrafts, setIncludeDrafts] = useState(false)
   const [running, setRunning] = useState(false)
   const [results, setResults] = useState<Result[]>([])
@@ -122,17 +139,61 @@ export function ImportClient() {
     imagesFailed: results.reduce((n, r) => n + (r.imagesFailed ?? 0), 0),
   }
 
-  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+  const reset = () => {
     setError('')
     setParsed(null)
     setResults([])
     setDoneCount(0)
-    const file = e.target.files?.[0]
-    if (!file) return
+  }
+
+  async function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    reset()
+    const files = Array.from(e.target.files ?? [])
+    if (!files.length) return
     try {
-      setParsed(parseExport(await file.text()))
+      const all: WpPost[] = []
+      let siteUrl = ''
+      for (const file of files) {
+        const text = await file.text()
+        const part = /\.json$/i.test(file.name) || text.trimStart().startsWith('[') || text.trimStart().startsWith('{') ? parseJson(text) : parseExport(text)
+        all.push(...part.posts)
+        siteUrl ||= part.siteUrl
+      }
+      setParsed(summarise(siteUrl, all))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not read the file.')
+    }
+  }
+
+  /** Reads every published post from the old site's API, a page of 20 at a time. */
+  async function readSite(e: React.FormEvent) {
+    e.preventDefault()
+    reset()
+    if (!siteInput.trim()) return
+    const all: WpPost[] = []
+    let site = ''
+    try {
+      for (let page = 1, total = 1; page <= total; page++) {
+        setReading(total > 1 ? `Reading page ${page} of ${total}…` : 'Reading your WordPress site…')
+        const res = await fetch(`/api/wp-import/fetch?site=${encodeURIComponent(siteInput)}&page=${page}`, { credentials: 'include' })
+        const data = (await res.json().catch(() => ({ error: `Server error (${res.status})` }))) as {
+          error?: string
+          posts?: WpPost[]
+          totalPages?: number
+          site?: string
+        }
+        if (data.error) throw new Error(data.error)
+        all.push(...(data.posts ?? []))
+        total = data.totalPages ?? 1
+        site = data.site ?? site
+      }
+      if (!all.length) throw new Error('No published posts were found on that site.')
+      setParsed(summarise(site, all))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not read the site.')
+      if (all.length) setParsed(summarise(site, all))
+    } finally {
+      setReading('')
     }
   }
 
@@ -173,22 +234,63 @@ export function ImportClient() {
   return (
     <div>
       <p style={{ color: 'var(--theme-elevation-600)', marginTop: 0 }}>
-        In WordPress, go to <strong>Tools → Export</strong>, choose <strong>Posts</strong> (or All content) and download the file. Then choose
-        it here. Posts keep their titles, dates, categories, tags, authors and images, and their old addresses redirect to the new
-        ones. Running the import again skips posts that are already here.
+        Posts keep their titles, dates, categories, tags, authors and images, and their old addresses redirect to the new ones.
+        Running the import again skips posts that are already here.
       </p>
 
-      <div style={box}>
-        <label htmlFor="wp-file" style={{ display: 'block', fontWeight: 600, marginBottom: 8 }}>
-          WordPress export file (.xml)
-        </label>
-        <input id="wp-file" type="file" accept=".xml,application/xml,text/xml" onChange={onFile} disabled={running} />
-        {error && (
-          <p role="alert" style={{ color: 'var(--theme-error-500)', marginBottom: 0 }}>
-            {error}
-          </p>
-        )}
+      <div role="tablist" aria-label="Where to import from" style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+        <button type="button" role="tab" aria-selected={source === 'site'} className={`btn btn--size-small ${source === 'site' ? 'btn--style-primary' : 'btn--style-secondary'}`} style={{ margin: 0 }} onClick={() => { setSource('site'); reset() }} disabled={running}>
+          From the site&apos;s address
+        </button>
+        <button type="button" role="tab" aria-selected={source === 'file'} className={`btn btn--size-small ${source === 'file' ? 'btn--style-primary' : 'btn--style-secondary'}`} style={{ margin: 0 }} onClick={() => { setSource('file'); reset() }} disabled={running}>
+          From a file (.json or .xml)
+        </button>
       </div>
+
+      {source === 'site' ? (
+        <form style={box} onSubmit={readSite}>
+          <label htmlFor="wp-site" style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>
+            Old WordPress site address
+          </label>
+          <p style={{ margin: '0 0 10px', color: 'var(--theme-elevation-600)', fontSize: 14 }}>
+            Reads every published post through WordPress&apos;s built-in API. No login or export needed. Drafts aren&apos;t available this way.
+          </p>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <input
+              id="wp-site"
+              type="text"
+              inputMode="url"
+              placeholder="giantability.com"
+              value={siteInput}
+              onChange={(e) => setSiteInput(e.target.value)}
+              disabled={running || Boolean(reading)}
+              style={{ flex: '1 1 280px', minHeight: 40, padding: '0 12px', borderRadius: 6, border: '1px solid var(--theme-elevation-250)', background: 'var(--theme-input-bg)', color: 'var(--theme-text)', fontSize: 15 }}
+            />
+            <button type="submit" className="btn btn--style-primary btn--size-medium" style={{ margin: 0 }} disabled={running || Boolean(reading) || !siteInput.trim()}>
+              Find posts
+            </button>
+          </div>
+          {reading && <p role="status" style={{ marginBottom: 0 }}>{reading}</p>}
+        </form>
+      ) : (
+        <div style={box}>
+          <label htmlFor="wp-file" style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>
+            WordPress .json or .xml file(s)
+          </label>
+          <p style={{ margin: '0 0 10px', color: 'var(--theme-elevation-600)', fontSize: 14 }}>
+            <strong>.json:</strong> in your browser open <code>yoursite.com/wp-json/wp/v2/posts?per_page=100&amp;_embed&amp;page=1</code>, save the page
+            (Ctrl/Cmd + S) as a .json file, then repeat with <code>page=2</code>, <code>page=3</code>… until it shows an error. Choose all the
+            files together. <strong>.xml:</strong> WordPress Tools → Export.
+          </p>
+          <input id="wp-file" type="file" multiple accept=".xml,.json,application/xml,text/xml,application/json" onChange={onFiles} disabled={running} />
+        </div>
+      )}
+
+      {error && (
+        <p role="alert" style={{ color: 'var(--theme-error-500)', marginBottom: 0 }}>
+          {error}
+        </p>
+      )}
 
       {parsed && (
         <div style={box}>

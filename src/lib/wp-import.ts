@@ -9,22 +9,9 @@ import path from 'path'
 import type { Payload } from 'payload'
 
 import { slugify } from '../fields/slug'
+import type { WpPost } from './wp-import-types'
 
-export type WpPost = {
-  wpId: string
-  title: string
-  slug: string
-  date: string // ISO
-  status: string // publish | draft | private | future | pending
-  link: string
-  html: string
-  excerpt: string
-  author: string
-  categories: { name: string; slug: string }[]
-  tags: string[]
-  featuredUrl: string | null
-  siteUrl: string
-}
+export type { WpPost } from './wp-import-types'
 
 export type ImportResult = {
   status: 'imported' | 'skipped' | 'failed'

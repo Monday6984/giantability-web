@@ -25,9 +25,13 @@ Built with **Next.js** and **Payload CMS** (the admin lives inside the same app 
 
 Admin → **Import from WordPress** (or `/admin/import`, admins only).
 
-1. In WordPress: **Tools → Export → Posts** (or All content) → **Download Export File**.
-2. Choose that `.xml` file on the Import page. It is read in the browser, so large exports are fine.
-3. Click **Import**. Posts are brought in one at a time; keep the tab open until it says *Finished*.
+Three ways in, all on the same page:
+
+- **From the site's address** (easiest): type the old site's address and click *Find posts*. Published posts are read through WordPress's built-in API (`/wp-json/wp/v2/posts`), 20 at a time. No login or export needed. If a security plugin blocks the API, the page says so.
+- **.json files**: open `oldsite.com/wp-json/wp/v2/posts?per_page=100&_embed&page=1` in a browser, save it as a .json file, repeat for `page=2`, `page=3`… and choose all the files together.
+- **.xml export**: WordPress **Tools → Export → Posts**. The only route that includes drafts.
+
+Then click **Import**. Posts are brought in one at a time; keep the tab open until it says *Finished*.
 
 What comes across: title, slug, publish date, excerpt (or one made from the text), body (headings, paragraphs, links, lists, quotes), categories (WordPress "Uncategorized" becomes "General"), tags, author, the featured image and images in the text. Images are downloaded from the old site, so it must still be online. Captions stay with their images, YouTube embeds become links. Drafts are optional and arrive as drafts.
 
