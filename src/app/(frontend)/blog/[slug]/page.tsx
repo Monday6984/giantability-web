@@ -7,6 +7,7 @@ import { EyeIcon } from '@/components/site/Icons'
 import { PostBody } from '@/components/site/PostBody'
 import { PostCard, PostMeta } from '@/components/site/PostCard'
 import { ShareButtons } from '@/components/site/ShareButtons'
+import { SubscribeForm } from '@/components/site/SubscribeForm'
 import { TrackPost } from '@/components/site/TrackView'
 import { formatCount, getPostBySlug, getRelatedPosts, mediaUrl, payload } from '@/lib/data'
 import { getViewTotals } from '@/lib/views'
@@ -94,10 +95,7 @@ export default async function PostPage({ params }: Props) {
         )}
 
         <div className="wrap read prose" style={{ paddingTop: 32 }}>
-          <PostBody body={post.body} />
-          <div style={{ margin: '2em 0' }}>
-            <AdSlot placement="article" />
-          </div>
+          <PostBody body={post.body} insert={<AdSlot placement="article" />} />
         </div>
 
         <div className="wrap read" style={{ paddingTop: 8, paddingBottom: 56, display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -109,6 +107,15 @@ export default async function PostPage({ params }: Props) {
             </div>
           )}
           <ShareButtons url={url} title={post.title} />
+          <section aria-labelledby="post-sub-h" className="signup-card">
+            <div>
+              <h2 id="post-sub-h" className="h-m">
+                Enjoyed this? Get the weekly round-up
+              </h2>
+              <p>New posts from Giantability in your inbox once a week, plus each new magazine issue.</p>
+            </div>
+            <SubscribeForm source={`post:${post.slug}`} compact />
+          </section>
         </div>
       </article>
 

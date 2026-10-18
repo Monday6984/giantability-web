@@ -14,7 +14,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: 'Giantability Media Networks', template: '%s · Giantability' },
   description: 'Weekly stories and a magazine from Giantability Media Networks.',
-  openGraph: { siteName: 'Giantability Media Networks', type: 'website' },
+  openGraph: { siteName: 'Giantability Media Networks', type: 'website', images: ['/brand/gmn-icon-512.png'] },
+  icons: { apple: '/brand/apple-touch-icon.png' },
   alternates: { types: { 'application/rss+xml': '/rss.xml' } },
 }
 

@@ -158,17 +158,17 @@ export async function getSettings(): Promise<SiteSetting> {
   return p.findGlobal({ slug: 'site-settings', depth: 1 })
 }
 
-export async function getActiveAd(placement: 'home' | 'article') {
+/** Ads running now for a placement. The end date counts as a full day. */
+export async function getActiveAds(placement: 'home' | 'article') {
   const settings = await getSettings()
   const now = Date.now()
-  const live = (settings.ads ?? []).filter(
+  return (settings.ads ?? []).filter(
     (ad) =>
       ad.active &&
       ad.placement === placement &&
       (!ad.startDate || Date.parse(ad.startDate) <= now) &&
-      (!ad.endDate || Date.parse(ad.endDate) >= now),
+      (!ad.endDate || Date.parse(ad.endDate) + 864e5 > now),
   )
-  return live[0] ?? null
 }
 
 /** Picks the best stored size of an image, falling back to the original. */

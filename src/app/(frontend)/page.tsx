@@ -159,10 +159,10 @@ export default async function HomePage() {
               Join the mailing list
             </h2>
             <p style={{ margin: 0, color: 'var(--ink-2)', lineHeight: 1.6 }}>
-              We&apos;ll email you when each new magazine issue is out. No spam, unsubscribe any time.
+              A weekly round-up of new posts, plus a note when each magazine issue is out. No spam, unsubscribe any time.
             </p>
           </div>
-          <SubscribeForm />
+          <SubscribeForm source="homepage" />
         </div>
       </section>
     </>

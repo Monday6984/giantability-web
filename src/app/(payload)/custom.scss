@@ -1,0 +1,14 @@
+// GMN logo: the teal version on the light admin theme, the white version on the dark one.
+.gmn-logo {
+  display: block;
+  height: auto;
+}
+.gmn-logo--dark {
+  display: none;
+}
+html[data-theme='dark'] .gmn-logo--light {
+  display: none;
+}
+html[data-theme='dark'] .gmn-logo--dark {
+  display: block;
+}

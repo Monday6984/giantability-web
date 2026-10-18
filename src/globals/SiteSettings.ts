@@ -106,7 +106,10 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'ads',
               type: 'array',
-              admin: { description: 'Ads shown on the site. Only active ads inside their dates are shown.' },
+              admin: {
+                description:
+                  'Paid ads. Only ticked ads inside their dates are shown; if several run in the same place they take turns. When none is running, the GMN "Advertise with us" banner shows instead.',
+              },
               fields: [
                 {
                   type: 'row',
@@ -123,8 +126,34 @@ export const SiteSettings: GlobalConfig = {
                     },
                   ],
                 },
-                { name: 'image', type: 'upload', relationTo: 'media', required: true },
-                { name: 'link', type: 'text', required: true },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'image',
+                      label: 'Banner image',
+                      type: 'upload',
+                      relationTo: 'media',
+                      required: true,
+                      filterOptions: { mimeType: { contains: 'image' } },
+                      admin: {
+                        description:
+                          'Homepage: 1940 × 500 px (970 × 250 shown). In posts: 1456 × 180 px (728 × 90 shown). Shown in full, never cropped.',
+                      },
+                    },
+                    {
+                      name: 'mobileImage',
+                      label: 'Phone version (optional)',
+                      type: 'upload',
+                      relationTo: 'media',
+                      filterOptions: { mimeType: { contains: 'image' } },
+                      admin: {
+                        description: 'Shown on phones instead: 600 × 500 px works well. Without it, the banner above is shrunk to fit.',
+                      },
+                    },
+                  ],
+                },
+                { name: 'link', type: 'text', required: true, admin: { description: 'Where a click goes, e.g. https://advertiser.com' } },
                 {
                   type: 'row',
                   fields: [
@@ -134,6 +163,21 @@ export const SiteSettings: GlobalConfig = {
                   ],
                 },
               ],
+            },
+          ],
+        },
+        {
+          label: 'Mailing list',
+          fields: [
+            {
+              name: 'weeklyDigest',
+              label: 'Send the weekly round-up of new posts',
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                description:
+                  'Each subscriber gets at most one email a week listing posts published since their last one. New magazine issues are announced separately (tick "Email subscribers on release" on the issue).',
+              },
             },
           ],
         },

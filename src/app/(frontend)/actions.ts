@@ -36,7 +36,7 @@ export async function subscribe(_prev: FormState, form: FormData): Promise<FormS
   } else {
     await p.create({ collection: 'subscribers', data: { email, active: true, source: str(form, 'source', 100) || 'website' } })
   }
-  return { ok: true, message: "You're on the list. We'll email you when the next issue is out." }
+  return { ok: true, message: "You're on the list. Look out for our weekly round-up." }
 }
 
 const TYPES = ['partnership', 'collaboration', 'advertising'] as const

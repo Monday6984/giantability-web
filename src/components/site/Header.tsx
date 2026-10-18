@@ -36,9 +36,19 @@ export function Header() {
   return (
     <header className={`site-header${dark ? ' dark' : ''}${open ? ' menu-open' : ''}`}>
       <div className="wrap">
-        <Link href="/" className="brand">
-          <span className="brand-name">GIANTABILITY</span>
-          <span className="brand-sub">Media Networks</span>
+        <Link href="/" className="brand" aria-label="Giantability Media Networks, home">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="brand-logo"
+            src={dark ? '/brand/gmn-logo-white.png' : '/brand/gmn-logo.png'}
+            alt=""
+            width={90}
+            height={60}
+          />
+          <span className="brand-words" aria-hidden="true">
+            <span className="brand-name">Giantability</span>
+            <span className="brand-sub">Media Networks</span>
+          </span>
         </Link>
 
         <nav aria-label="Main" className="nav nav-desktop">

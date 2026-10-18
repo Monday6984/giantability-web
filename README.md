@@ -19,7 +19,9 @@ Built with **Next.js** and **Payload CMS** (the admin lives inside the same app 
 
 **Scheduling:** publish a post or issue with a future date and it stays hidden until that date.
 
-**New-issue emails:** a daily job (`/api/cron/daily`, 08:00 UTC) emails subscribers about a newly released issue, 90 a day, until everyone has had it. Each email has an unsubscribe link.
+**Mailing list:** signups on the homepage, after every post and in the footer. Subscribers get a weekly round-up of new posts (at most one email a week each) and a note when a magazine issue is released. The daily job (`/api/cron/daily`, 08:00 UTC) sends both within one daily allowance (`DAILY_EMAIL_LIMIT`, default 90, under Resend's free 100/day), so about 600 subscribers fit on the free plan. Nothing is sent, or marked as sent, until `RESEND_API_KEY` is set. Admin → Subscribers has **Download list (CSV)** and **Preview the weekly email**; the round-up can be switched off in Site settings → Mailing list.
+
+**Adverts:** Site settings → Ad slots. Homepage banner 1940 × 500 px, in-post banner 1456 × 180 px (placed after the third paragraph), optional phone version 600 × 500 px. Several running ads in one place take turns. When none is running, GMN's own "Advertise with us" banner shows.
 
 ## Importing posts from WordPress
 

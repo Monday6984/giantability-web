@@ -3,12 +3,12 @@
  * With no RESEND_API_KEY set, emails are skipped and logged, so local development works without it.
  */
 
-type Email = { to: string; subject: string; html: string; replyTo?: string; unsubscribe?: string }
+export type Email = { to: string; subject: string; html: string; replyTo?: string; unsubscribe?: string }
 
-const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+export const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 const from = () => process.env.EMAIL_FROM ?? 'Giantability <no-reply@example.com>'
 
-const escape = (s: string) =>
+export const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string)
 
 async function resend(path: string, body: unknown) {
@@ -26,6 +26,9 @@ async function resend(path: string, body: unknown) {
   return true
 }
 
+/** True when emails can actually be sent (Resend is connected). */
+export const emailEnabled = () => Boolean(process.env.RESEND_API_KEY)
+
 const toPayload = (e: Email) => ({
   from: from(),
   to: [e.to],
@@ -40,10 +43,10 @@ export const sendEmail = (e: Email) => resend('/emails', toPayload(e))
 /** Sends up to 100 emails in one request. */
 export const sendBatch = (emails: Email[]) => (emails.length ? resend('/emails/batch', emails.map(toPayload)) : false)
 
-const layout = (inner: string) => `<!doctype html><html><body style="margin:0;background:#F4F5F7;font-family:Arial,Helvetica,sans-serif;color:#111318">
+export const layout = (inner: string) => `<!doctype html><html><body style="margin:0;background:#F4F5F7;font-family:Arial,Helvetica,sans-serif;color:#111318">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 16px">
 <table role="presentation" width="100%" style="max-width:560px;background:#FFFFFF;border-radius:12px" cellpadding="0" cellspacing="0">
-<tr><td style="padding:28px 32px 0;font-weight:800;font-size:22px;letter-spacing:-0.5px">GIANTABILITY</td></tr>
+<tr><td style="padding:24px 32px 0"><img src="${siteUrl()}/brand/gmn-logo.png" alt="Giantability Media Networks" width="84" height="56" style="display:block;border:0"></td></tr>
 <tr><td style="padding:16px 32px 32px;font-size:16px;line-height:1.6">${inner}</td></tr></table>
 <p style="font-size:12px;color:#5A5F6B">Giantability Media Networks</p></td></tr></table></body></html>`
 
@@ -77,7 +80,7 @@ export async function sendEnquiryAlert(doc: {
     html: layout(`<p style="margin:0 0 16px">A new enquiry came in from the Partner page.</p>
 <table role="presentation" style="font-size:15px;margin-bottom:16px">${rows}</table>
 <p style="white-space:pre-line;margin:0 0 20px">${escape(doc.message)}</p>
-<a href="${siteUrl()}/admin/collections/enquiries/${doc.id}" style="color:#C4321A;font-weight:bold">Open in the admin</a>`),
+<a href="${siteUrl()}/admin/collections/enquiries/${doc.id}" style="color:#E40C48;font-weight:bold">Open in the admin</a>`),
   })
 }
 
@@ -89,9 +92,9 @@ export const issueEmail = (
   to,
   unsubscribe,
   subject: `New issue: ${issue.title}`,
-  html: layout(`<p style="margin:0 0 8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#C4321A;font-weight:bold">Issue ${issue.issueNumber} is out</p>
+  html: layout(`<p style="margin:0 0 8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#E40C48;font-weight:bold">Issue ${issue.issueNumber} is out</p>
 <h1 style="margin:0 0 12px;font-size:28px;line-height:1.1">${escape(issue.title)}</h1>
 ${issue.summary ? `<p style="margin:0 0 20px">${escape(issue.summary)}</p>` : ''}
-<a href="${siteUrl()}/magazine/${issue.slug}" style="display:inline-block;background:#C4321A;color:#FFFFFF;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:999px">Read it online</a>
+<a href="${siteUrl()}/magazine/${issue.slug}" style="display:inline-block;background:#E40C48;color:#FFFFFF;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:999px">Read it online</a>
 <p style="margin:28px 0 0;font-size:12px;color:#5A5F6B">You're getting this because you joined the Giantability mailing list. <a href="${unsubscribe}" style="color:#5A5F6B">Unsubscribe</a></p>`),
 })

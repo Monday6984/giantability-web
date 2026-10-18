@@ -326,7 +326,7 @@ export function ImportClient() {
           {(running || results.length > 0) && (
             <div style={{ marginTop: 16 }}>
               <div aria-hidden="true" style={{ height: 8, background: 'var(--theme-elevation-150)', borderRadius: 4 }}>
-                <div style={{ height: 8, width: `${queue.length ? (doneCount / queue.length) * 100 : 0}%`, background: '#C4321A', borderRadius: 4 }} />
+                <div style={{ height: 8, width: `${queue.length ? (doneCount / queue.length) * 100 : 0}%`, background: '#E40C48', borderRadius: 4 }} />
               </div>
               <p role="status" style={{ marginBottom: 0 }}>
                 {running ? `Importing ${doneCount + 1} of ${queue.length}… keep this tab open.` : 'Finished.'} {counts.imported} imported,{' '}

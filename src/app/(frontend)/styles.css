@@ -7,10 +7,14 @@
   --line: #e3e4e8;
   --soft: #f4f5f7;
   --placeholder: #e6e7ea;
-  --accent: #c4321a;
-  --accent-dark: #8f2412;
-  --accent-tint: #fbe9e5;
-  --accent-light: #f0a591;
+  /* GMN brand colours, taken from the logo */
+  --accent: #e40c48; /* GMN pink */
+  --accent-dark: #b8093a;
+  --accent-tint: #fde7ee;
+  --accent-light: #ff8fae; /* pink for text on navy */
+  --teal: #007a7e; /* GMN teal */
+  --teal-dark: #005b5e;
+  --teal-tint: #e2f2f2;
   --navy: #0e1b2c;
   --navy-2: #24344a;
   --navy-line: #22344c;
@@ -153,29 +157,50 @@ a:hover {
 }
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
   text-decoration: none;
   color: var(--ink);
+  min-width: 0;
 }
 .brand:hover {
   color: var(--ink);
 }
+.brand-logo {
+  display: block;
+  height: 60px;
+  width: auto;
+  flex: none;
+}
+.brand-words {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
 .brand-name {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 26px;
-  letter-spacing: -0.02em;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--teal);
 }
 .brand-sub {
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
+  margin-top: 3px;
 }
 .site-header.dark .brand,
 .site-header.dark .brand:hover {
+  color: #fff;
+}
+.site-header.dark .brand-words {
+  border-color: var(--navy-line);
+}
+.site-header.dark .brand-name {
   color: #fff;
 }
 .site-header.dark .brand-sub {
@@ -292,12 +317,11 @@ a:hover {
   .site-header .wrap {
     flex-wrap: nowrap;
   }
-  .brand {
-    flex-wrap: nowrap;
-    min-width: 0;
-  }
-  .brand-sub {
+  .brand-words {
     display: none;
+  }
+  .brand-logo {
+    height: 44px;
   }
 }
 @media (min-width: 861px) {
@@ -418,7 +442,7 @@ a:hover {
   align-items: center;
 }
 .meta .cat {
-  color: var(--accent);
+  color: var(--teal);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -484,7 +508,7 @@ a:hover {
   gap: 20px;
 }
 .tag-dark {
-  background: var(--ink);
+  background: var(--teal);
   color: #fff;
   padding: 6px 10px;
   border-radius: 4px;
@@ -494,7 +518,7 @@ a:hover {
   border-radius: 12px;
 }
 .strip {
-  background: var(--ink);
+  background: var(--teal);
   color: #fff;
 }
 .strip .wrap {
@@ -585,23 +609,171 @@ a:hover {
 
 /* Ad slot */
 .ad {
-  border: 1px dashed #b8bbc3;
-  border-radius: 10px;
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   font-family: var(--font-body);
 }
 .ad-label {
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
 }
-.ad img {
+.ad--home {
+  max-width: 970px;
+  margin: 0 auto;
   width: 100%;
+}
+.ad--article {
+  max-width: 728px;
+  margin: 0 auto;
+  width: 100%;
+}
+.ad-paid {
+  display: block;
+  line-height: 0;
+}
+.ad-paid img {
+  display: block;
+  width: 100%;
+  height: auto;
   border-radius: 6px;
+}
+
+.post-insert {
+  margin: 2em 0;
+}
+.prose .ad img {
+  margin: 0;
+  border-radius: 0;
+}
+.prose .ad-paid img {
+  border-radius: 6px;
+}
+
+/* GMN's own "advertise with us" banner */
+.house-ad {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 28px;
+  padding: 28px 36px;
+  border-radius: 8px;
+  background: linear-gradient(110deg, var(--teal-dark) 0%, var(--teal) 60%, #0b8f93 100%);
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+}
+.house-ad:hover {
+  color: #fff;
+}
+.house-ad--home {
+  min-height: 250px;
+}
+.house-ad--article {
+  min-height: 90px;
+  padding: 14px 22px;
+  gap: 18px;
+}
+.house-ad__swoosh {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 46%;
+  z-index: -1;
+}
+.house-ad--article {
+  border-bottom: 4px solid var(--accent);
+}
+.house-ad--article .house-ad__swoosh {
+  display: none;
+}
+.house-ad__logo {
+  display: block;
+  height: 72px;
+  width: auto;
+}
+.house-ad--article .house-ad__logo {
+  height: 44px;
+}
+.house-ad__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.house-ad__kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ffd4e0;
+}
+.house-ad__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.house-ad--article .house-ad__kicker {
+  display: none;
+}
+.house-ad--article .house-ad__title {
+  font-size: 20px;
+}
+.house-ad__sub {
+  font-size: 14px;
+  color: #d4ecec;
+}
+.house-ad--article .house-ad__sub {
+  font-size: 13px;
+}
+.house-ad__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.house-ad:hover .house-ad__cta {
+  background: var(--accent-dark);
+}
+@media (max-width: 720px) {
+  .house-ad,
+  .house-ad--article {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 18px;
+    gap: 14px 16px;
+    min-height: 0;
+  }
+  .house-ad__cta {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .house-ad__swoosh {
+    display: none;
+  }
+  .house-ad--home {
+    border-bottom: 4px solid var(--accent);
+  }
+  .house-ad__logo,
+  .house-ad--article .house-ad__logo {
+    height: 44px;
+  }
+  .house-ad__title {
+    font-size: 21px;
+  }
 }
 
 /* Blog */
@@ -1186,4 +1358,72 @@ a:hover {
   .prose {
     font-size: 19px;
   }
+}
+
+/* Mailing list signups */
+.inline-form.compact input {
+  min-height: 44px;
+  font-size: 15px;
+}
+.signup-card {
+  margin-top: 24px;
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--teal-tint);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.signup-card .h-m {
+  font-size: 22px;
+}
+.signup-card p {
+  margin: 6px 0 0;
+  color: var(--ink-2);
+  font-size: 15px;
+}
+.signup-card .inline-form {
+  flex: none;
+  max-width: none;
+}
+.site-footer .footer-top {
+  padding-bottom: 0;
+}
+.site-footer .footer-top:empty {
+  display: none;
+}
+.footer-signup {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #2a2e36;
+}
+.footer-signup__title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+}
+.footer-signup__sub {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+.footer-signup .inline-form input {
+  background: #1d2129;
+  border-color: #3a3f4a;
+  color: #fff;
+}
+.footer-signup .inline-form input::placeholder {
+  color: #9a9ea8;
+}
+.footer-signup .form-msg {
+  color: #fff;
+}
+.site-footer .footer-signup a {
+  min-height: 0;
 }

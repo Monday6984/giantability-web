@@ -357,7 +357,7 @@ export interface Enquiry {
   createdAt: string;
 }
 /**
- * People who joined the mailing list. Untick "Active" to stop emailing someone.
+ * People on the mailing list. They get a weekly round-up of new posts and a note when a magazine issue comes out. Untick "Active" to stop emailing someone.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "subscribers".
@@ -370,6 +370,7 @@ export interface Subscriber {
    * Where they signed up.
    */
   source?: string | null;
+  lastDigestAt?: string | null;
   /**
    * The latest issue this person has been emailed about.
    */
@@ -683,6 +684,7 @@ export interface SubscribersSelect<T extends boolean = true> {
   email?: T;
   active?: T;
   source?: T;
+  lastDigestAt?: T;
   lastNotifiedIssue?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -825,13 +827,23 @@ export interface SiteSetting {
   replyTime?: string | null;
   mediaKit?: (number | null) | Media;
   /**
-   * Ads shown on the site. Only active ads inside their dates are shown.
+   * Paid ads. Only ticked ads inside their dates are shown; if several run in the same place they take turns. When none is running, the GMN "Advertise with us" banner shows instead.
    */
   ads?:
     | {
         advertiser: string;
         placement: 'home' | 'article';
+        /**
+         * Homepage: 1940 × 500 px (970 × 250 shown). In posts: 1456 × 180 px (728 × 90 shown). Shown in full, never cropped.
+         */
         image: number | Media;
+        /**
+         * Shown on phones instead: 600 × 500 px works well. Without it, the banner above is shrunk to fit.
+         */
+        mobileImage?: (number | null) | Media;
+        /**
+         * Where a click goes, e.g. https://advertiser.com
+         */
         link: string;
         startDate?: string | null;
         endDate?: string | null;
@@ -839,6 +851,10 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Each subscriber gets at most one email a week listing posts published since their last one. New magazine issues are announced separately (tick "Email subscribers on release" on the issue).
+   */
+  weeklyDigest?: boolean | null;
   social?:
     | {
         /**
@@ -893,12 +909,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         advertiser?: T;
         placement?: T;
         image?: T;
+        mobileImage?: T;
         link?: T;
         startDate?: T;
         endDate?: T;
         active?: T;
         id?: T;
       };
+  weeklyDigest?: T;
   social?:
     | T
     | {

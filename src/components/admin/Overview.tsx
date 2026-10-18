@@ -66,6 +66,11 @@ export async function Overview() {
       }),
     ])
 
+  const monthAgo = new Date(Date.now() - 30 * 864e5).toISOString()
+  const [subscribers, newSubscribers] = await Promise.all([
+    payload.count({ collection: 'subscribers', where: { active: { equals: true } } }),
+    payload.count({ collection: 'subscribers', where: { and: [{ active: { equals: true } }, { createdAt: { greater_than: monthAgo } }] } }),
+  ])
   const issue = latestIssue.docs[0]
   const issueReads = issue ? ((await getViewTotals(payload, 'issue', [issue.id])).get(String(issue.id)) ?? 0) : 0
 
@@ -90,7 +95,7 @@ export async function Overview() {
         <span style={label}>Counted by the site · last 30 days unless noted</span>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
         <div style={card}>
           <p style={label}>Page views</p>
           <p style={big}>{fmt(pageViews)}</p>
@@ -111,6 +116,11 @@ export async function Overview() {
           <p style={big}>{fmt(newEnquiries.totalDocs)}</p>
           <p style={label}>Open the inbox →</p>
         </a>
+        <a href="/admin/collections/subscribers" style={{ ...card, textDecoration: 'none', color: 'inherit' }}>
+          <p style={label}>Mailing list</p>
+          <p style={big}>{fmt(subscribers.totalDocs)}</p>
+          <p style={label}>+{fmt(newSubscribers.totalDocs)} in the last 30 days</p>
+        </a>
       </div>
 
       <div style={card}>
@@ -128,7 +138,7 @@ export async function Overview() {
               title={`${dayLabel(d.day)}: ${fmt(d.value)} views`}
               style={{
                 height: `${Math.max(2, (d.value / max) * 100)}%`,
-                background: i === series.length - 1 ? '#C4321A' : 'var(--theme-elevation-800)',
+                background: i === series.length - 1 ? '#E40C48' : 'var(--theme-elevation-800)',
                 borderRadius: '4px 4px 0 0',
               }}
             />
@@ -169,7 +179,7 @@ export async function Overview() {
                     <td style={{ ...td, textAlign: 'right' }}>{fmt(p.total)}</td>
                     <td style={td}>
                       <div aria-hidden="true" style={{ height: 8, background: 'var(--theme-elevation-100)', borderRadius: 4 }}>
-                        <div style={{ height: 8, width: `${(p.total / pageMax) * 100}%`, background: '#0E1B2C', borderRadius: 4 }} />
+                        <div style={{ height: 8, width: `${(p.total / pageMax) * 100}%`, background: '#007A7E', borderRadius: 4 }} />
                       </div>
                     </td>
                   </tr>
