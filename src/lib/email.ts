@@ -7,6 +7,8 @@ export type Email = { to: string; subject: string; html: string; replyTo?: strin
 
 export const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 const from = () => process.env.EMAIL_FROM ?? 'Giantability <no-reply@example.com>'
+// Where readers' replies go (the sending address has no inbox). Enquiry alerts reply to the enquirer instead.
+const defaultReplyTo = () => process.env.EMAIL_REPLY_TO || undefined
 
 export const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string)
@@ -34,7 +36,7 @@ const toPayload = (e: Email) => ({
   to: [e.to],
   subject: e.subject,
   html: e.html,
-  reply_to: e.replyTo,
+  reply_to: e.replyTo ?? defaultReplyTo(),
   headers: e.unsubscribe ? { 'List-Unsubscribe': `<${e.unsubscribe}>` } : undefined,
 })
 
