@@ -15,3 +15,12 @@ export const revalidate = (...paths: string[]) => {
     }
   }
 }
+
+/** Refreshes every cached page (used when something in the shared header or footer changes). */
+export const revalidateAll = () => {
+  try {
+    revalidatePath('/', 'layout')
+  } catch {
+    // Not running inside Next.js.
+  }
+}

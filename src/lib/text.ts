@@ -13,3 +13,6 @@ export const readingMinutes = (body: unknown) => {
   const words = lexicalText(body).split(/\s+/).filter(Boolean).length
   return Math.max(1, Math.round(words / 220))
 }
+
+/** A phone number as typed in the admin ("+234 913 061 6867") → a tel: link value ("+2349130616867"). */
+export const telHref = (n: string) => n.replace(/[^\d+]/g, '')

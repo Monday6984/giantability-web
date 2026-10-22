@@ -1,7 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { anyone, isLoggedIn } from '../access'
-import { revalidate } from '../lib/revalidate'
+import { revalidateAll } from '../lib/revalidate'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -182,8 +182,29 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
-          label: 'Footer & social',
+          label: 'Contact & social',
           fields: [
+            {
+              name: 'contactEmail',
+              type: 'email',
+              admin: { description: 'Shown in the footer of every page and on the Partner page.' },
+            },
+            {
+              name: 'phones',
+              label: 'Phone numbers',
+              type: 'array',
+              maxRows: 4,
+              admin: { description: 'Shown in the footer and on the Partner page. Write the number as it should appear, with the country code.' },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'number', type: 'text', required: true, admin: { description: 'e.g. +234 913 061 6867' } },
+                    { name: 'label', type: 'text', admin: { description: 'Optional, e.g. Nigeria' } },
+                  ],
+                },
+              ],
+            },
             {
               name: 'social',
               type: 'array',
@@ -203,6 +224,6 @@ export const SiteSettings: GlobalConfig = {
     },
   ],
   hooks: {
-    afterChange: [() => revalidate('/', '/partner', '/blog/[slug]')],
+    afterChange: [() => revalidateAll()],
   },
 }

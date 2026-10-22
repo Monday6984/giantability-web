@@ -44,7 +44,8 @@ export default async function PartnerPage() {
       <PartnerSection
         ways={ways}
         budgetOptions={settings.budgetOptions ?? []}
-        partnersEmail={settings.partnersEmail}
+        partnersEmail={settings.partnersEmail || settings.contactEmail}
+        phones={settings.phones}
         replyTime={settings.replyTime}
         mediaKitUrl={mediaUrl(settings.mediaKit)}
       />

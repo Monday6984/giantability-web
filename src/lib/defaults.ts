@@ -55,6 +55,13 @@ export async function loadDefaults(payload: Payload) {
         ways,
         budgetOptions: settings.budgetOptions?.length ? settings.budgetOptions : ['Under ₦500,000', '₦500,000 – ₦2,000,000', 'Above ₦2,000,000'],
         replyTime: settings.replyTime || '2 working days',
+        contactEmail: settings.contactEmail || 'info@giantability.com',
+        phones: settings.phones?.length
+          ? settings.phones
+          : [
+              { number: '+1 317 937 9676', label: 'USA' },
+              { number: '+234 913 061 6867', label: 'Nigeria' },
+            ],
       },
     })
   }

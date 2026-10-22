@@ -855,6 +855,26 @@ export interface SiteSetting {
    * Each subscriber gets at most one email a week listing posts published since their last one. New magazine issues are announced separately (tick "Email subscribers on release" on the issue).
    */
   weeklyDigest?: boolean | null;
+  /**
+   * Shown in the footer of every page and on the Partner page.
+   */
+  contactEmail?: string | null;
+  /**
+   * Shown in the footer and on the Partner page. Write the number as it should appear, with the country code.
+   */
+  phones?:
+    | {
+        /**
+         * e.g. +234 913 061 6867
+         */
+        number: string;
+        /**
+         * Optional, e.g. Nigeria
+         */
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   social?:
     | {
         /**
@@ -917,6 +937,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   weeklyDigest?: T;
+  contactEmail?: T;
+  phones?:
+    | T
+    | {
+        number?: T;
+        label?: T;
+        id?: T;
+      };
   social?:
     | T
     | {

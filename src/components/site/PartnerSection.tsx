@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react'
 
 import { submitEnquiry, type FormState } from '@/app/(frontend)/actions'
+import { telHref } from '@/lib/text'
 
 type Kind = 'partnership' | 'collaboration' | 'advertising'
 type Way = { type: Kind; blurb: string; packages: { name: string; description: string; price?: string | null }[] }
@@ -18,12 +19,14 @@ export function PartnerSection({
   ways,
   budgetOptions,
   partnersEmail,
+  phones,
   replyTime,
   mediaKitUrl,
 }: {
   ways: Way[]
   budgetOptions: string[]
   partnersEmail?: string | null
+  phones?: { id?: string | null; number: string; label?: string | null }[] | null
   replyTime?: string | null
   mediaKitUrl?: string | null
 }) {
@@ -97,12 +100,23 @@ export function PartnerSection({
           <p style={{ margin: 0, fontSize: 17, lineHeight: 1.6, color: 'var(--ink-2)' }}>
             Tell us what you have in mind.{replyTime ? ` The partnerships team replies within ${replyTime}.` : ''}
           </p>
-          {(partnersEmail || mediaKitUrl) && (
+          {(partnersEmail || phones?.length || mediaKitUrl) && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15, paddingTop: 8 }}>
               {partnersEmail && (
                 <>
                   <span style={{ fontWeight: 600 }}>Prefer email?</span>
                   <a href={`mailto:${partnersEmail}`}>{partnersEmail}</a>
+                </>
+              )}
+              {phones && phones.length > 0 && (
+                <>
+                  <span style={{ fontWeight: 600, paddingTop: 8 }}>Or call us</span>
+                  {phones.map((p) => (
+                    <span key={p.id ?? p.number}>
+                      <a href={`tel:${telHref(p.number)}`}>{p.number}</a>
+                      {p.label && <span className="muted"> · {p.label}</span>}
+                    </span>
+                  ))}
                 </>
               )}
               {mediaKitUrl && (

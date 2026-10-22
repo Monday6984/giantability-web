@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { getSettings } from '@/lib/data'
+import { telHref } from '@/lib/text'
 
 import { FooterSignup } from './FooterSignup'
 
@@ -17,6 +18,18 @@ export async function Footer() {
           <img src="/brand/gmn-logo-white.png" alt="Giantability Media Networks" width={90} height={60} style={{ height: 60, width: 'auto', alignSelf: 'flex-start' }} />
           <span style={{ fontSize: 14 }}>Giantability Media Networks · © {new Date().getFullYear()}</span>
         </div>
+        {(settings.contactEmail || settings.phones?.length) && (
+          <address className="footer-contact">
+            <span className="footer-label">Contact us</span>
+            {settings.contactEmail && <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>}
+            {(settings.phones ?? []).map((p) => (
+              <a key={p.id ?? p.number} href={`tel:${telHref(p.number)}`}>
+                {p.number}
+                {p.label && <span className="footer-phone-label">{p.label}</span>}
+              </a>
+            ))}
+          </address>
+        )}
         <nav aria-label="Footer">
           <Link href="/blog">Blog</Link>
           <Link href="/magazine">Magazine</Link>

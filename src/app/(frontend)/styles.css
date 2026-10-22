@@ -1427,3 +1427,27 @@ a:hover {
 .site-footer .footer-signup a {
   min-height: 0;
 }
+
+/* Footer contact details */
+.footer-contact {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+}
+.footer-contact .footer-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 2px;
+}
+.site-footer .footer-contact a {
+  gap: 8px;
+}
+.footer-phone-label {
+  display: inline-block;
+  color: #9aa0ab;
+  font-size: 13px;
+}
