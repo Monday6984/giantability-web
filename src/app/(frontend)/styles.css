@@ -1245,18 +1245,69 @@ a:hover {
   font-weight: 800;
   font-size: 36px;
 }
-.packages {
+.ways {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 16px;
 }
-.packages > div {
+.way {
   background: #fff;
   border-radius: 12px;
-  padding: 22px;
+  padding: 26px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+}
+.way p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  flex: 1;
+}
+.way-cta {
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  padding: 0;
+  min-height: 44px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.call-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+.call-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 1.5px solid var(--accent);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+.call-btn svg {
+  color: var(--accent);
+}
+.call-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.call-btn:hover svg {
+  color: #fff;
+}
+.call-label {
+  font-weight: 400;
+  font-size: 14px;
+  opacity: 0.7;
 }
 .form {
   display: flex;

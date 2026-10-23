@@ -8,7 +8,7 @@ export const Enquiries: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Inbox',
-    defaultColumns: ['name', 'type', 'organisation', 'budget', 'status', 'createdAt'],
+    defaultColumns: ['name', 'type', 'organisation', 'status', 'createdAt'],
     description: 'Messages from the Partner with us page.',
   },
   defaultSort: '-createdAt',
@@ -55,7 +55,6 @@ export const Enquiries: CollectionConfig = {
         { name: 'phone', label: 'Phone / WhatsApp', type: 'text' },
       ],
     },
-    { name: 'budget', type: 'text' },
     { name: 'message', type: 'textarea', required: true },
     { name: 'notes', label: 'Internal notes', type: 'textarea', admin: { description: 'Only staff see this.' } },
   ],

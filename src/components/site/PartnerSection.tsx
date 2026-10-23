@@ -5,8 +5,10 @@ import { useActionState, useState } from 'react'
 import { submitEnquiry, type FormState } from '@/app/(frontend)/actions'
 import { telHref } from '@/lib/text'
 
+import { PhoneIcon } from './Icons'
+
 type Kind = 'partnership' | 'collaboration' | 'advertising'
-type Way = { type: Kind; blurb: string; packages: { name: string; description: string; price?: string | null }[] }
+type Way = { type: Kind; blurb: string }
 
 const LABELS: Record<Kind, string> = {
   partnership: 'Partnership',
@@ -17,77 +19,47 @@ const ORDER: Kind[] = ['partnership', 'collaboration', 'advertising']
 
 export function PartnerSection({
   ways,
-  budgetOptions,
   partnersEmail,
   phones,
   replyTime,
   mediaKitUrl,
 }: {
   ways: Way[]
-  budgetOptions: string[]
   partnersEmail?: string | null
   phones?: { id?: string | null; number: string; label?: string | null }[] | null
   replyTime?: string | null
   mediaKitUrl?: string | null
 }) {
-  const tabs = ORDER.filter((k) => ways.some((w) => w.type === k))
-  const [tab, setTab] = useState<Kind>(tabs[0] ?? 'partnership')
-  const [kind, setKind] = useState<Kind>(tabs[0] ?? 'partnership')
+  const cards = ORDER.map((k) => ways.find((w) => w.type === k)).filter((w): w is Way => Boolean(w))
+  const [kind, setKind] = useState<Kind>(cards[0]?.type ?? 'partnership')
   const [state, action, pending] = useActionState<FormState, FormData>(submitEnquiry, null)
-  const active = ways.find((w) => w.type === tab)
+
+  const talkAbout = (k: Kind) => {
+    setKind(k)
+    document.getElementById('enquire')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <>
-      {tabs.length > 0 && (
+      {cards.length > 0 && (
         <section aria-labelledby="ways-h" style={{ background: 'var(--soft)' }}>
           <div className="wrap section" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             <h2 id="ways-h" className="display h-l">
               Ways to work with us
             </h2>
-            <div role="tablist" aria-label="Ways to work with us" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {tabs.map((k) => (
-                <button
-                  key={k}
-                  type="button"
-                  role="tab"
-                  id={`tab-${k}`}
-                  aria-controls="ways-panel"
-                  aria-selected={tab === k}
-                  className="pill"
-                  style={{ fontWeight: 600, minHeight: 48 }}
-                  onClick={() => {
-                    setTab(k)
-                    setKind(k)
-                  }}
-                >
-                  {LABELS[k]}
-                </button>
+            <div className="ways">
+              {cards.map((w) => (
+                <div key={w.type} className="way">
+                  <h3 className="h-m" style={{ fontSize: 26 }}>
+                    {LABELS[w.type]}
+                  </h3>
+                  <p>{w.blurb}</p>
+                  <button type="button" className="text-link way-cta" onClick={() => talkAbout(w.type)}>
+                    Let&apos;s talk about it →
+                  </button>
+                </div>
               ))}
             </div>
-            {active && (
-              <div
-                id="ways-panel"
-                role="tabpanel"
-                aria-labelledby={`tab-${tab}`}
-                style={{ display: 'flex', flexWrap: 'wrap', gap: 32, alignItems: 'flex-start' }}
-              >
-                <div style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-                  <h3 className="h-m" style={{ fontSize: 30 }}>
-                    {LABELS[active.type]}
-                  </h3>
-                  <p style={{ margin: 0, fontSize: 17, lineHeight: 1.6, color: 'var(--ink-2)' }}>{active.blurb}</p>
-                </div>
-                <div className="packages" style={{ flex: '2 1 480px' }}>
-                  {active.packages.map((p) => (
-                    <div key={p.name}>
-                      <span style={{ fontWeight: 600, fontSize: 17 }}>{p.name}</span>
-                      <span style={{ fontSize: 15, lineHeight: 1.5, color: 'var(--ink-2)' }}>{p.description}</span>
-                      {p.price && <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-dark)' }}>{p.price}</span>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </section>
       )}
@@ -95,29 +67,29 @@ export function PartnerSection({
       <section id="enquire" aria-labelledby="enq-h" className="wrap section" style={{ display: 'flex', flexWrap: 'wrap', gap: 48, alignItems: 'flex-start' }}>
         <div style={{ flex: '1 1 320px', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <h2 id="enq-h" className="display h-l">
-            Start a conversation
+            Talk to our management
           </h2>
           <p style={{ margin: 0, fontSize: 17, lineHeight: 1.6, color: 'var(--ink-2)' }}>
-            Tell us what you have in mind.{replyTime ? ` The partnerships team replies within ${replyTime}.` : ''}
+            Every partnership is shaped in conversation. Call us, or send a short note and we&apos;ll arrange a discussion
+            {replyTime ? ` within ${replyTime}` : ''}.
           </p>
-          {(partnersEmail || phones?.length || mediaKitUrl) && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15, paddingTop: 8 }}>
+          {phones && phones.length > 0 && (
+            <div className="call-list">
+              {phones.map((p) => (
+                <a key={p.id ?? p.number} className="call-btn" href={`tel:${telHref(p.number)}`}>
+                  <PhoneIcon />
+                  <span>{p.number}</span>
+                  {p.label && <span className="call-label">{p.label}</span>}
+                </a>
+              ))}
+            </div>
+          )}
+          {(partnersEmail || mediaKitUrl) && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15, paddingTop: 4 }}>
               {partnersEmail && (
-                <>
-                  <span style={{ fontWeight: 600 }}>Prefer email?</span>
-                  <a href={`mailto:${partnersEmail}`}>{partnersEmail}</a>
-                </>
-              )}
-              {phones && phones.length > 0 && (
-                <>
-                  <span style={{ fontWeight: 600, paddingTop: 8 }}>Or call us</span>
-                  {phones.map((p) => (
-                    <span key={p.id ?? p.number}>
-                      <a href={`tel:${telHref(p.number)}`}>{p.number}</a>
-                      {p.label && <span className="muted"> · {p.label}</span>}
-                    </span>
-                  ))}
-                </>
+                <span>
+                  Email: <a href={`mailto:${partnersEmail}`}>{partnersEmail}</a>
+                </span>
               )}
               {mediaKitUrl && (
                 <a href={mediaKitUrl} target="_blank" rel="noreferrer">
@@ -135,7 +107,7 @@ export function PartnerSection({
                 Thanks — we&apos;ve got it.
               </span>
               <span style={{ fontSize: 17, lineHeight: 1.6, color: '#D5DCE6' }}>
-                Your {state.message} enquiry is with the partnerships team, and they&apos;ll reply by email.
+                Your {state.message} enquiry is with our management team, and they&apos;ll be in touch to arrange a discussion.
               </span>
             </div>
           ) : (
@@ -168,19 +140,8 @@ export function PartnerSection({
                   <input name="phone" type="tel" autoComplete="tel" />
                 </label>
               </div>
-              {budgetOptions.length > 0 && (
-                <label className="field">
-                  Budget range
-                  <select name="budget" defaultValue="Not sure yet">
-                    <option>Not sure yet</option>
-                    {budgetOptions.map((b) => (
-                      <option key={b}>{b}</option>
-                    ))}
-                  </select>
-                </label>
-              )}
               <label className="field">
-                Tell us about it
+                What would you like to discuss?
                 <textarea name="message" rows={5} required />
               </label>
               <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ display: 'none' }} />
@@ -190,7 +151,7 @@ export function PartnerSection({
                 </p>
               )}
               <button type="submit" className="btn lg" style={{ alignSelf: 'flex-start' }} disabled={pending}>
-                {pending ? 'Sending…' : 'Send enquiry'}
+                {pending ? 'Sending…' : 'Request a discussion'}
               </button>
             </form>
           )}

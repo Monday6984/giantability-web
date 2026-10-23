@@ -65,7 +65,11 @@ export const SiteSettings: GlobalConfig = {
               name: 'ways',
               label: 'Ways to work with us',
               type: 'array',
-              admin: { description: 'One entry per tab: Partnership, Collaboration, Advertising.' },
+              maxRows: 3,
+              admin: {
+                description:
+                  'One short card each for Partnership, Collaboration and Advertising, each inviting people to talk to management. No prices: terms are agreed in conversation.',
+              },
               fields: [
                 {
                   name: 'type',
@@ -77,23 +81,15 @@ export const SiteSettings: GlobalConfig = {
                     { label: 'Advertising', value: 'advertising' },
                   ],
                 },
-                { name: 'blurb', type: 'textarea', required: true },
                 {
-                  name: 'packages',
-                  type: 'array',
-                  fields: [
-                    { name: 'name', type: 'text', required: true },
-                    { name: 'description', type: 'text', required: true },
-                    { name: 'price', type: 'text', admin: { description: 'e.g. From ₦150,000 / week, or "By agreement"' } },
-                  ],
+                  name: 'blurb',
+                  label: 'One line about it',
+                  type: 'textarea',
+                  required: true,
+                  maxLength: 180,
+                  admin: { description: 'Keep it to a sentence or two (180 characters at most).' },
                 },
               ],
-            },
-            {
-              name: 'budgetOptions',
-              type: 'text',
-              hasMany: true,
-              admin: { description: 'Choices in the form\'s budget dropdown.' },
             },
             { name: 'partnersEmail', type: 'email' },
             { name: 'replyTime', type: 'text', defaultValue: '2 working days' },

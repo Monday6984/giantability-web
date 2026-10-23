@@ -347,7 +347,6 @@ export interface Enquiry {
   organisation?: string | null;
   email: string;
   phone?: string | null;
-  budget?: string | null;
   message: string;
   /**
    * Only staff see this.
@@ -670,7 +669,6 @@ export interface EnquiriesSelect<T extends boolean = true> {
   organisation?: T;
   email?: T;
   phone?: T;
-  budget?: T;
   message?: T;
   notes?: T;
   updatedAt?: T;
@@ -799,30 +797,18 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * One entry per tab: Partnership, Collaboration, Advertising.
+   * One short card each for Partnership, Collaboration and Advertising, each inviting people to talk to management. No prices: terms are agreed in conversation.
    */
   ways?:
     | {
         type: 'partnership' | 'collaboration' | 'advertising';
+        /**
+         * Keep it to a sentence or two (180 characters at most).
+         */
         blurb: string;
-        packages?:
-          | {
-              name: string;
-              description: string;
-              /**
-               * e.g. From ₦150,000 / week, or "By agreement"
-               */
-              price?: string | null;
-              id?: string | null;
-            }[]
-          | null;
         id?: string | null;
       }[]
     | null;
-  /**
-   * Choices in the form's budget dropdown.
-   */
-  budgetOptions?: string[] | null;
   partnersEmail?: string | null;
   replyTime?: string | null;
   mediaKit?: (number | null) | Media;
@@ -909,17 +895,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         type?: T;
         blurb?: T;
-        packages?:
-          | T
-          | {
-              name?: T;
-              description?: T;
-              price?: T;
-              id?: T;
-            };
         id?: T;
       };
-  budgetOptions?: T;
   partnersEmail?: T;
   replyTime?: T;
   mediaKit?: T;

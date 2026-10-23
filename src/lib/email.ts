@@ -59,7 +59,6 @@ export async function sendEnquiryAlert(doc: {
   organisation?: string | null
   email: string
   phone?: string | null
-  budget?: string | null
   message: string
 }) {
   const to = process.env.ENQUIRY_NOTIFY_EMAIL
@@ -70,7 +69,6 @@ export async function sendEnquiryAlert(doc: {
     ['Organisation', doc.organisation ?? ''],
     ['Email', doc.email],
     ['Phone', doc.phone ?? ''],
-    ['Budget', doc.budget ?? ''],
   ]
     .filter(([, v]) => v)
     .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#5A5F6B">${k}</td><td>${escape(String(v))}</td></tr>`)

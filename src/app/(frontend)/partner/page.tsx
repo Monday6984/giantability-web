@@ -13,11 +13,7 @@ export const metadata: Metadata = {
 export default async function PartnerPage() {
   const settings = await getSettings()
   const audience = settings.audience ?? []
-  const ways = (settings.ways ?? []).map((w) => ({
-    type: w.type,
-    blurb: w.blurb,
-    packages: (w.packages ?? []).map((p) => ({ name: p.name, description: p.description, price: p.price })),
-  }))
+  const ways = (settings.ways ?? []).map((w) => ({ type: w.type, blurb: w.blurb }))
 
   return (
     <>
@@ -43,7 +39,6 @@ export default async function PartnerPage() {
 
       <PartnerSection
         ways={ways}
-        budgetOptions={settings.budgetOptions ?? []}
         partnersEmail={settings.partnersEmail || settings.contactEmail}
         phones={settings.phones}
         replyTime={settings.replyTime}

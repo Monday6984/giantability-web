@@ -62,7 +62,6 @@ export async function submitEnquiry(_prev: FormState, form: FormData): Promise<F
       message,
       organisation: str(form, 'organisation', 200) || undefined,
       phone: str(form, 'phone', 50) || undefined,
-      budget: str(form, 'budget', 100) || undefined,
       status: 'new',
     },
   })

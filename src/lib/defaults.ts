@@ -8,35 +8,9 @@ import type { Payload } from 'payload'
 const categories = ['Business', 'Culture', 'Tech', 'Lifestyle', 'Interviews']
 
 const ways = [
-  {
-    type: 'partnership' as const,
-    blurb: 'Ongoing, co-branded work for organisations that want a sustained presence with our readers.',
-    packages: [
-      { name: 'Sponsored series', description: 'A recurring column or theme across several weekly posts.', price: 'Price on request' },
-      { name: 'Issue partner', description: 'Presenting partner of a magazine issue, with cover credit.', price: 'Price on request' },
-      { name: 'Events & launches', description: 'Co-hosted events, panels and live coverage.', price: 'Price on request' },
-      { name: 'Annual package', description: 'A bundled year of site, magazine and newsletter presence.', price: 'Price on request' },
-    ],
-  },
-  {
-    type: 'collaboration' as const,
-    blurb: 'Creative work with writers, creators, brands and other media — usually no fee either way.',
-    packages: [
-      { name: 'Guest posts', description: 'Write for the blog under your own byline.', price: 'Editorial review' },
-      { name: 'Interviews & features', description: 'Be featured in the magazine or a weekly post.', price: 'Editorial review' },
-      { name: 'Content swaps', description: 'Cross-publish with partner outlets and newsletters.', price: 'By agreement' },
-      { name: 'Creator projects', description: 'Joint video, audio or social campaigns.', price: 'By agreement' },
-    ],
-  },
-  {
-    type: 'advertising' as const,
-    blurb: 'Paid placements on the website and inside the magazine.',
-    packages: [
-      { name: 'Homepage banner', description: 'Banner placement on the homepage for one week.', price: 'Price on request' },
-      { name: 'In-article slot', description: 'Placement inside every weekly post.', price: 'Price on request' },
-      { name: 'Magazine full page', description: 'Full-page ad in the online magazine.', price: 'Price on request' },
-    ],
-  },
+  { type: 'partnership' as const, blurb: 'Long-term, co-branded work for organisations that want a lasting presence with our readers.' },
+  { type: 'collaboration' as const, blurb: 'Creative projects with writers, creators, brands and fellow media.' },
+  { type: 'advertising' as const, blurb: 'Put your brand in front of our readers, on the website and in the magazine.' },
 ]
 
 export async function loadDefaults(payload: Payload) {
@@ -53,7 +27,6 @@ export async function loadDefaults(payload: Payload) {
       slug: 'site-settings',
       data: {
         ways,
-        budgetOptions: settings.budgetOptions?.length ? settings.budgetOptions : ['Under ₦500,000', '₦500,000 – ₦2,000,000', 'Above ₦2,000,000'],
         replyTime: settings.replyTime || '2 working days',
         contactEmail: settings.contactEmail || 'info@giantability.com',
         phones: settings.phones?.length
