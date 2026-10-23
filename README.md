@@ -12,7 +12,7 @@ Built with **Next.js** and **Payload CMS** (the admin lives inside the same app 
 | Blog | `/blog`, `/blog/category/<slug>` | Category filter, search, pagination, "Most read this month" |
 | Post | `/blog/<slug>` | View counter, in-article ad slot, share buttons, related posts |
 | Magazine | `/magazine`, `/magazine/<slug>` | 3D flip-book reader with page-turn sound (two-page spreads on desktop, single pages on phones), contents list, archive |
-| Partner with us | `/partner` | Packages per tab, audience figures, enquiry form |
+| Partner with us | `/partner` | Short cards for partnership, collaboration and advertising (no prices), audience figures, phone numbers and an enquiry form |
 | Admin | `/admin` | Overview dashboard, posts, issues, enquiries, subscribers, settings |
 
 **Magazine reader:** the issue PDF is drawn page by page into a flip book ([StPageFlip](https://github.com/Nodlik/StPageFlip), MIT). Next/Prev, a click on a page, dragging a corner, swiping and the arrow keys all turn pages, with a paper sound (`public/sounds/page-flip.mp3`, original and free to use; replace the file to change it) that readers can mute. PDFs laid out as two-page spreads are cut into single pages automatically. Zooming switches to a scrollable view of the current pages, and visitors who have reduced motion turned on get a fade instead of the page curl.
