@@ -11,9 +11,11 @@ Built with **Next.js** and **Payload CMS** (the admin lives inside the same app 
 | Home | `/` | Featured post (set in Site settings, or the newest), latest posts, current magazine issue, signup |
 | Blog | `/blog`, `/blog/category/<slug>` | Category filter, search, pagination, "Most read this month" |
 | Post | `/blog/<slug>` | View counter, in-article ad slot, share buttons, related posts |
-| Magazine | `/magazine`, `/magazine/<slug>` | PDF reader (two-page spreads on desktop, single pages on phones), contents list, archive |
+| Magazine | `/magazine`, `/magazine/<slug>` | 3D flip-book reader with page-turn sound (two-page spreads on desktop, single pages on phones), contents list, archive |
 | Partner with us | `/partner` | Packages per tab, audience figures, enquiry form |
 | Admin | `/admin` | Overview dashboard, posts, issues, enquiries, subscribers, settings |
+
+**Magazine reader:** the issue PDF is drawn page by page into a flip book ([StPageFlip](https://github.com/Nodlik/StPageFlip), MIT). Next/Prev, a click on a page, dragging a corner, swiping and the arrow keys all turn pages, with a paper sound (`public/sounds/page-flip.mp3`, original and free to use; replace the file to change it) that readers can mute. PDFs laid out as two-page spreads are cut into single pages automatically. Zooming switches to a scrollable view of the current pages, and visitors who have reduced motion turned on get a fade instead of the page curl.
 
 **View tracking** is counted by the site itself (`/api/views` → the `daily_views` table): every page view, every post view, and a magazine read once a visitor turns past the cover. Bots are ignored and repeat views from the same visitor within 30 minutes count once. The admin Overview shows the 14-day chart, views by page and top posts.
 
