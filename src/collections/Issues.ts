@@ -68,7 +68,7 @@ export const Issues: CollectionConfig = {
               type: 'number',
               required: true,
               min: 1,
-              admin: { description: "The PDF's own page number. If the PDF is laid out as two-page spreads, each spread counts as one page." },
+              admin: { description: 'The page number printed in the magazine (the cover is page 1). Works the same whether the PDF has single pages or two-page spreads.' },
             },
           ],
         },

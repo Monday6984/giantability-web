@@ -263,11 +263,11 @@ export default function MagazineReader({ issueId, pdfUrl, title, contents, allow
     const book = document.createElement('div')
     host.appendChild(book)
     imgRefs.current = []
-    const items = leaves.map((leaf, i) => {
+    const items = leaves.map((_, i) => {
       const el = document.createElement('div')
       el.className = 'flip-page'
       const img = document.createElement('img')
-      img.alt = `Page ${leaf.page}${leaf.half ? ` (${leaf.half} half)` : ''}`
+      img.alt = `Page ${i + 1}`
       img.draggable = false
       const cached = cache.current.get(i)
       if (cached?.url) {
@@ -366,10 +366,11 @@ export default function MagazineReader({ issueId, pdfUrl, title, contents, allow
     else pf.flipPrev()
   }, [atStart, still, zoom, jump])
 
+  // Contents entries use the magazine's printed page numbers: page n is leaf n − 1.
   const goToPage = (page: number) => {
     const pf = flipRef.current
-    const target = leaves.findIndex((l) => l.page === page)
-    if (!pf || target < 0 || shown.includes(target)) return
+    const target = page - 1
+    if (!pf || target < 0 || target >= count || shown.includes(target)) return
     if (still || zoom > 1) jump(() => pf.turnToPage(target))
     else pf.flip(target)
   }
@@ -405,7 +406,8 @@ export default function MagazineReader({ issueId, pdfUrl, title, contents, allow
 
   /* ---------- Labels ---------- */
 
-  const shownPages = [...new Set(shown.map((i) => leaves[i]?.page).filter(Boolean))] as number[]
+  // Printed page numbers: when spreads are cut in two, PDF sheet 2 holds pages 2 and 3, and so on.
+  const shownPages = shown.map((i) => i + 1)
   const label = shownPages.length > 1 ? `Pages ${shownPages[0]}–${shownPages[shownPages.length - 1]}` : `Page ${shownPages[0] ?? 1}`
   const progress = count ? ((shown[shown.length - 1] + 1) / count) * 100 : 0
   const zoomIndex = ZOOMS.indexOf(zoom)
@@ -438,7 +440,7 @@ export default function MagazineReader({ issueId, pdfUrl, title, contents, allow
                     return (
                       <div key={i} className="zoom-page" style={{ width: pageW * zoom, aspectRatio: String(ratio) }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        {url && <img src={url} alt={`Page ${leaves[i]?.page}`} />}
+                        {url && <img src={url} alt={`Page ${i + 1}`} />}
                       </div>
                     )
                   })}
@@ -454,7 +456,7 @@ export default function MagazineReader({ issueId, pdfUrl, title, contents, allow
           </button>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, flex: '1 1 200px' }}>
             <span role="status" style={{ fontSize: 15, color: '#D5DCE6' }}>
-              {doc ? `${label} of ${doc.numPages}` : 'Loading…'}
+              {count ? `${label} of ${count}` : 'Loading…'}
             </span>
             <div className="progress" aria-hidden="true">
               <div style={{ width: `${progress}%` }} />
