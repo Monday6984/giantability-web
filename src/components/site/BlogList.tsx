@@ -105,9 +105,11 @@ export async function BlogList({ category, page, q }: { category?: Category; pag
                     <span className="n">{i + 1}</span>
                     <span style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                       <span style={{ fontWeight: 600, lineHeight: 1.3 }}>{post.title}</span>
-                      <span className="muted" style={{ fontSize: 13 }}>
-                        {views.toLocaleString('en-GB')} views
-                      </span>
+                      {views !== null && (
+                        <span className="muted" style={{ fontSize: 13 }}>
+                          {views.toLocaleString('en-GB')} views
+                        </span>
+                      )}
                     </span>
                   </Link>
                 </li>

@@ -4,8 +4,7 @@ import { AdSlot } from '@/components/site/AdSlot'
 import { PostCard } from '@/components/site/PostCard'
 import { SubscribeForm } from '@/components/site/SubscribeForm'
 import { TvStrip } from '@/components/site/TvStrip'
-import { formatDate, getIssues, getPosts, getSettings, mediaUrl, payload, type PostWithViews } from '@/lib/data'
-import { getViewTotals } from '@/lib/views'
+import { formatDate, getIssues, getPosts, getSettings, mediaUrl, withViews, type PostWithViews } from '@/lib/data'
 
 // Cached and refreshed every 5 minutes, or straight away when an editor publishes.
 export const revalidate = 300
@@ -16,9 +15,7 @@ export default async function HomePage() {
   let featured: PostWithViews | undefined
   const pick = settings.featuredPost
   if (pick && typeof pick === 'object' && pick._status === 'published' && Date.parse(pick.publishedAt) <= Date.now()) {
-    const p = await payload()
-    const views = await getViewTotals(p, 'post', [pick.id])
-    featured = { ...pick, viewCount: views.get(String(pick.id)) ?? 0 }
+    featured = (await withViews([pick]))[0]
   }
   featured ??= latest.docs[0]
   const rest = latest.docs.filter((d) => d.id !== featured?.id).slice(0, 6)

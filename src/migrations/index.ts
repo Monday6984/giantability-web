@@ -6,6 +6,7 @@ import * as migration_20261018_213733_mailing_list_and_ads from './20261018_2137
 import * as migration_20261022_081059_contact_details from './20261022_081059_contact_details';
 import * as migration_20261023_230644_simple_partner_page from './20261023_230644_simple_partner_page';
 import * as migration_20261025_160403_giantability_tv from './20261025_160403_giantability_tv';
+import * as migration_20261025_163430_old_view_counts from './20261025_163430_old_view_counts';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20261025_160403_giantability_tv.up,
     down: migration_20261025_160403_giantability_tv.down,
-    name: '20261025_160403_giantability_tv'
+    name: '20261025_160403_giantability_tv',
+  },
+  {
+    up: migration_20261025_163430_old_view_counts.up,
+    down: migration_20261025_163430_old_view_counts.down,
+    name: '20261025_163430_old_view_counts'
   },
 ];

@@ -36,6 +36,16 @@ export default async function LegacyRedirect({ params }: Props) {
   })
   if (exact.docs[0]?.slug) permanentRedirect(`/blog/${exact.docs[0].slug}`)
 
+  // An old magazine (flip-book) address, set on the issue.
+  const issue = await p.find({
+    collection: 'issues',
+    where: { and: [{ legacyPath: { in: [path, `${path}/`] } }, { _status: { equals: 'published' } }] },
+    limit: 1,
+    depth: 0,
+    overrideAccess: false,
+  })
+  if (issue.docs[0]?.slug) permanentRedirect(`/magazine/${issue.docs[0].slug}`)
+
   // Otherwise try the last part of the address as a post slug (covers /2024/05/my-post and /my-post).
   const last = parts.at(-1)
   if (last && /^[a-z0-9-]+$/i.test(last)) {

@@ -20,6 +20,8 @@ Built with **Next.js** and **Payload CMS** (the admin lives inside the same app 
 
 **Giantability TV:** reads the channel's public YouTube feed (no API key, the latest ~15 uploads), refreshed about hourly, so new uploads appear on their own. The daily job saves a copy (`tv-cache`) that the page falls back to if YouTube can't be reached. Changing the channel link in Site settings looks up the new channel's ID on save. Plays started on the site are counted as `video` views (admin Overview: Video plays, Top videos).
 
+**Old view counts:** posts and issues have a "views on the old website" number that is added to the site's own count. Admin → Import from WordPress → **Old view counts** fills it from the old site's Jetpack Stats (with a WordPress.com API key from apikey.wordpress.com, or a CSV export); imported posts match on their WordPress ID, issues on old address/title, and anything can be matched by hand. Saving an issue's match also sets its old flip-book address, which then redirects. Counts below Site settings → View counts → **Hide view counts below** (default 50) aren't shown publicly.
+
 **View tracking** is counted by the site itself (`/api/views` → the `daily_views` table): every page view, every post view, and a magazine read once a visitor turns past the cover. Bots are ignored and repeat views from the same visitor within 30 minutes count once. The admin Overview shows the 14-day chart, views by page and top posts.
 
 **Scheduling:** publish a post or issue with a future date and it stays hidden until that date.

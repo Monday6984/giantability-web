@@ -65,6 +65,16 @@ export const Posts: CollectionConfig = {
     },
     viewCountField('post', 'Views'),
     {
+      name: 'earlierViews',
+      label: 'Views on the old website',
+      type: 'number',
+      min: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Views on the old website, added to the count shown on the site. Filled in by Import → Old view counts, or type it in.',
+      },
+    },
+    {
       name: 'legacyPath',
       label: 'Old WordPress address',
       type: 'text',

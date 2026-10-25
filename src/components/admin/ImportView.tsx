@@ -5,6 +5,7 @@ import type { AdminViewServerProps } from 'payload'
 import React from 'react'
 
 import { ImportClient } from './ImportClient'
+import { OldViewsClient } from './OldViewsClient'
 
 /** Admin page at /admin/import: bring posts across from a WordPress export file. */
 export function ImportView({ initPageResult, params, searchParams }: AdminViewServerProps) {
@@ -27,7 +28,13 @@ export function ImportView({ initPageResult, params, searchParams }: AdminViewSe
         <div style={{ maxWidth: 860, paddingTop: 24, paddingBottom: 64 }}>
           <h1 style={{ marginBottom: 8 }}>Import from WordPress</h1>
           {user?.role === 'admin' ? (
-            <ImportClient />
+            <>
+              <ImportClient />
+              <h2 id="old-views" style={{ marginTop: 56, marginBottom: 8 }}>
+                Old view counts
+              </h2>
+              <OldViewsClient />
+            </>
           ) : (
             <p>Only admins can import posts. Ask an admin to change your role under Users.</p>
           )}

@@ -102,6 +102,26 @@ export const Issues: CollectionConfig = {
       },
     },
     viewCountField('issue', 'Reads'),
+    {
+      name: 'earlierViews',
+      label: 'Reads on the old website',
+      type: 'number',
+      min: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Views on the old website, added to the count shown on the site. Filled in by Import → Old view counts, or type it in.',
+      },
+    },
+    {
+      name: 'legacyPath',
+      label: 'Old website address',
+      type: 'text',
+      index: true,
+      admin: {
+        position: 'sidebar',
+        description: 'e.g. /3d-flip-book/america-evolves-at-250/ — visitors to this old address are sent to this issue.',
+      },
+    },
   ],
   hooks: {
     afterChange: [({ doc }) => revalidate('/', '/magazine', `/magazine/${doc.slug}`, '/sitemap.xml')],

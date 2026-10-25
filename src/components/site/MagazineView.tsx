@@ -73,7 +73,8 @@ export async function MagazineView({ issue }: { issue: Issue | null }) {
                     Issue {i.issueNumber}: {i.title}
                   </span>
                   <span className="muted" style={{ fontSize: 13, marginTop: -6 }}>
-                    {formatDate(i.releaseDate, { day: undefined })} · {formatCount(reads.get(String(i.id)) ?? 0)} reads
+                    {formatDate(i.releaseDate, { day: undefined })}
+                    {reads.get(String(i.id)) != null && ` · ${formatCount(reads.get(String(i.id)) as number)} reads`}
                   </span>
                 </Link>
               )

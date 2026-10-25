@@ -21,7 +21,8 @@ export function PostMeta({ post }: { post: PostWithViews }) {
   )
 }
 
-export function Views({ count }: { count: number }) {
+export function Views({ count }: { count: number | null }) {
+  if (count === null) return null
   return (
     <span className="views">
       <EyeIcon />

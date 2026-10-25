@@ -18,12 +18,20 @@ const liveIssues = (): Where => ({
   and: [{ _status: { equals: 'published' } }, { releaseDate: { less_than_equal: nowIso() } }],
 })
 
-export type PostWithViews = Post & { viewCount: number }
+/** viewCount is null when the count is below Site settings → View counts (so nothing is shown). */
+export type PostWithViews = Post & { viewCount: number | null }
 
-async function withViews(posts: Post[]): Promise<PostWithViews[]> {
+/** Views on this site plus any carried over from the old website, or null if under the display minimum. */
+export async function publicCount(counted: number, earlier?: number | null) {
+  const total = counted + Math.max(0, earlier ?? 0)
+  const min = (await getSettings()).minViewsShown ?? 0
+  return total >= min ? total : null
+}
+
+export async function withViews(posts: Post[]): Promise<PostWithViews[]> {
   const p = await payload()
   const totals = await getViewTotals(p, 'post', posts.map((x) => x.id))
-  return posts.map((x) => ({ ...x, viewCount: totals.get(String(x.id)) ?? 0 }))
+  return Promise.all(posts.map(async (x) => ({ ...x, viewCount: await publicCount(totals.get(String(x.id)) ?? 0, x.earlierViews) })))
 }
 
 export async function getPosts(opts: { page?: number; limit?: number; category?: Category; q?: string } = {}) {
@@ -92,9 +100,10 @@ export async function getMostRead(limit = 5) {
     overrideAccess: false,
   })
   const byId = new Map(res.docs.map((d) => [String(d.id), d]))
+  const min = (await getSettings()).minViewsShown ?? 0
   return top
-    .map((t) => ({ post: byId.get(t.docId), views: t.total }))
-    .filter((x): x is { post: Post; views: number } => Boolean(x.post))
+    .map((t) => ({ post: byId.get(t.docId), views: t.total >= min ? t.total : null }))
+    .filter((x): x is { post: Post; views: number | null } => Boolean(x.post))
     .slice(0, limit)
 }
 
@@ -135,9 +144,13 @@ export async function getIssueBySlug(slug: string) {
   return res.docs[0] ?? null
 }
 
+/** Reads per issue as shown on the site (old-site reads included; null = below the display minimum). */
 export async function getIssueReads(issues: Issue[]) {
   const p = await payload()
-  return getViewTotals(p, 'issue', issues.map((i) => i.id))
+  const counted = await getViewTotals(p, 'issue', issues.map((i) => i.id))
+  const out = new Map<string, number | null>()
+  for (const i of issues) out.set(String(i.id), await publicCount(counted.get(String(i.id)) ?? 0, i.earlierViews))
+  return out
 }
 
 /** The next scheduled issue, so the archive can say when it's coming. */
@@ -153,10 +166,11 @@ export async function getNextIssueDate() {
   return res.docs[0]?.releaseDate ?? null
 }
 
-export async function getSettings(): Promise<SiteSetting> {
+// Once per request, however many components ask.
+export const getSettings = cache(async (): Promise<SiteSetting> => {
   const p = await payload()
   return p.findGlobal({ slug: 'site-settings', depth: 1 })
-}
+})
 
 /** Ads running now for a placement. The end date counts as a full day. */
 export async function getActiveAds(placement: 'home' | 'article') {

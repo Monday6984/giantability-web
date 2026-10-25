@@ -179,6 +179,22 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
+          label: 'View counts',
+          fields: [
+            {
+              name: 'minViewsShown',
+              label: 'Hide view counts below',
+              type: 'number',
+              min: 0,
+              defaultValue: 50,
+              admin: {
+                description:
+                  'Posts and magazine issues with fewer views than this show no count at all (rather than e.g. "3 views"). The admin always shows the exact numbers. 0 = always show.',
+              },
+            },
+          ],
+        },
+        {
           label: 'Giantability TV',
           fields: [
             {

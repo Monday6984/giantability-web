@@ -185,9 +185,13 @@ export interface Post {
    */
   readingTime?: number | null;
   /**
-   * All-time, counted by the site.
+   * All-time, counted by this website (old-site views are added on top).
    */
   views?: number | null;
+  /**
+   * Views on the old website, added to the count shown on the site. Filled in by Import → Old view counts, or type it in.
+   */
+  earlierViews?: number | null;
   /**
    * Set by the WordPress importer. Visitors to this old address are sent to this post.
    */
@@ -328,9 +332,17 @@ export interface Issue {
    */
   notificationsDone?: boolean | null;
   /**
-   * All-time, counted by the site.
+   * All-time, counted by this website (old-site views are added on top).
    */
   views?: number | null;
+  /**
+   * Views on the old website, added to the count shown on the site. Filled in by Import → Old view counts, or type it in.
+   */
+  earlierViews?: number | null;
+  /**
+   * e.g. /3d-flip-book/america-evolves-at-250/ — visitors to this old address are sent to this issue.
+   */
+  legacyPath?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -549,6 +561,7 @@ export interface PostsSelect<T extends boolean = true> {
   tags?: T;
   readingTime?: T;
   views?: T;
+  earlierViews?: T;
   legacyPath?: T;
   wpId?: T;
   updatedAt?: T;
@@ -578,6 +591,8 @@ export interface IssuesSelect<T extends boolean = true> {
   notifySubscribers?: T;
   notificationsDone?: T;
   views?: T;
+  earlierViews?: T;
+  legacyPath?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -844,6 +859,10 @@ export interface SiteSetting {
    */
   weeklyDigest?: boolean | null;
   /**
+   * Posts and magazine issues with fewer views than this show no count at all (rather than e.g. "3 views"). The admin always shows the exact numbers. 0 = always show.
+   */
+  minViewsShown?: number | null;
+  /**
    * The Giantability TV page and the homepage strip show the newest videos from this channel automatically (refreshed about every hour).
    */
   youtubeChannel?: string | null;
@@ -942,6 +961,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   weeklyDigest?: T;
+  minViewsShown?: T;
   youtubeChannel?: T;
   youtubeChannelId?: T;
   tvOnHomepage?: T;

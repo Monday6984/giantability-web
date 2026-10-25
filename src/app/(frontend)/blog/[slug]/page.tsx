@@ -9,8 +9,7 @@ import { PostCard, PostMeta } from '@/components/site/PostCard'
 import { ShareButtons } from '@/components/site/ShareButtons'
 import { SubscribeForm } from '@/components/site/SubscribeForm'
 import { TrackPost } from '@/components/site/TrackView'
-import { formatCount, getPostBySlug, getRelatedPosts, mediaUrl, payload } from '@/lib/data'
-import { getViewTotals } from '@/lib/views'
+import { formatCount, getPostBySlug, getRelatedPosts, mediaUrl, withViews } from '@/lib/data'
 
 export const revalidate = 300
 
@@ -39,8 +38,7 @@ export default async function PostPage({ params }: Props) {
   if (!post) notFound()
 
   const related = await getRelatedPosts(post)
-  const p = await payload()
-  const relViews = await getViewTotals(p, 'post', related.map((r) => r.id))
+  const relatedWithViews = await withViews(related)
   const author = typeof post.author === 'object' ? post.author : null
   const cover = typeof post.cover === 'object' ? post.cover : null
   const heroImg = mediaUrl(cover, 'hero')
@@ -74,10 +72,12 @@ export default async function PostPage({ params }: Props) {
                 </span>
               </div>
             </div>
-            <span className="view-badge">
-              <EyeIcon size={18} />
-              {formatCount(post.viewCount)} views
-            </span>
+            {post.viewCount !== null && (
+              <span className="view-badge">
+                <EyeIcon size={18} />
+                {formatCount(post.viewCount)} views
+              </span>
+            )}
           </div>
         </div>
 
@@ -126,8 +126,8 @@ export default async function PostPage({ params }: Props) {
               Keep reading
             </h2>
             <div className="grid-cards">
-              {related.map((r) => (
-                <PostCard key={r.id} post={{ ...r, viewCount: relViews.get(String(r.id)) ?? 0 }} />
+              {relatedWithViews.map((r) => (
+                <PostCard key={r.id} post={r} />
               ))}
             </div>
           </div>

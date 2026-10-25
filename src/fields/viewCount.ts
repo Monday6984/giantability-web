@@ -11,7 +11,7 @@ export const viewCountField = (kind: ViewKind, label: string): Field => ({
   label,
   type: 'number',
   virtual: true,
-  admin: { readOnly: true, position: 'sidebar', description: 'All-time, counted by the site.' },
+  admin: { readOnly: true, position: 'sidebar', description: 'All-time, counted by this website (old-site views are added on top).' },
   hooks: {
     afterRead: [
       async ({ req, originalDoc }) => {
