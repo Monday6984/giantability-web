@@ -1,7 +1,7 @@
 import { sql } from '@payloadcms/db-postgres'
 import type { Payload } from 'payload'
 
-export type ViewKind = 'page' | 'post' | 'issue'
+export type ViewKind = 'page' | 'post' | 'issue' | 'video'
 
 const TIMEZONE = 'Africa/Lagos'
 

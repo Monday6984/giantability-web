@@ -23,8 +23,8 @@ export const DailyViews: CollectionConfig = {
   },
   indexes: [{ fields: ['kind', 'docId', 'day'], unique: true }],
   fields: [
-    { name: 'kind', type: 'text', required: true, index: true, admin: { description: 'page, post or issue' } },
-    { name: 'docId', type: 'text', required: true, index: true, admin: { description: 'Page path, or the post / issue id' } },
+    { name: 'kind', type: 'text', required: true, index: true, admin: { description: 'page, post, issue or video (a play started on the site)' } },
+    { name: 'docId', type: 'text', required: true, index: true, admin: { description: 'Page path, the post / issue id, or the YouTube video id' } },
     { name: 'day', type: 'text', required: true, index: true, admin: { description: 'YYYY-MM-DD (Lagos time)' } },
     { name: 'count', type: 'number', required: true, defaultValue: 0 },
   ],

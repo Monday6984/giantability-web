@@ -12,10 +12,13 @@ Built with **Next.js** and **Payload CMS** (the admin lives inside the same app 
 | Blog | `/blog`, `/blog/category/<slug>` | Category filter, search, pagination, "Most read this month" |
 | Post | `/blog/<slug>` | View counter, in-article ad slot, share buttons, related posts |
 | Magazine | `/magazine`, `/magazine/<slug>` | 3D flip-book reader with page-turn sound (two-page spreads on desktop, single pages on phones), contents list, archive |
+| Giantability TV | `/tv` | Newest videos from the YouTube channel (Site settings → Giantability TV), played on the page; also a 3-video strip on the homepage |
 | Partner with us | `/partner` | Short cards for partnership, collaboration and advertising (no prices), audience figures, phone numbers and an enquiry form |
 | Admin | `/admin` | Overview dashboard, posts, issues, enquiries, subscribers, settings |
 
 **Magazine reader:** the issue PDF is drawn page by page into a flip book ([StPageFlip](https://github.com/Nodlik/StPageFlip), MIT). Next/Prev, a click on a page, dragging a corner, swiping and the arrow keys all turn pages, with a paper sound (`public/sounds/page-flip.mp3`, original and free to use; replace the file to change it) that readers can mute. PDFs laid out as two-page spreads are cut into single pages automatically. Zooming switches to a scrollable view of the current pages, and visitors who have reduced motion turned on get a fade instead of the page curl.
+
+**Giantability TV:** reads the channel's public YouTube feed (no API key, the latest ~15 uploads), refreshed about hourly, so new uploads appear on their own. The daily job saves a copy (`tv-cache`) that the page falls back to if YouTube can't be reached. Changing the channel link in Site settings looks up the new channel's ID on save. Plays started on the site are counted as `video` views (admin Overview: Video plays, Top videos).
 
 **View tracking** is counted by the site itself (`/api/views` → the `daily_views` table): every page view, every post view, and a magazine read once a visitor turns past the cover. Bots are ignored and repeat views from the same visitor within 30 minutes count once. The admin Overview shows the 14-day chart, views by page and top posts.
 

@@ -5,6 +5,7 @@ import * as migration_20261012_214137_wordpress_import_fields from './20261012_2
 import * as migration_20261018_213733_mailing_list_and_ads from './20261018_213733_mailing_list_and_ads';
 import * as migration_20261022_081059_contact_details from './20261022_081059_contact_details';
 import * as migration_20261023_230644_simple_partner_page from './20261023_230644_simple_partner_page';
+import * as migration_20261025_160403_giantability_tv from './20261025_160403_giantability_tv';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20261023_230644_simple_partner_page.up,
     down: migration_20261023_230644_simple_partner_page.down,
-    name: '20261023_230644_simple_partner_page'
+    name: '20261023_230644_simple_partner_page',
+  },
+  {
+    up: migration_20261025_160403_giantability_tv.up,
+    down: migration_20261025_160403_giantability_tv.down,
+    name: '20261025_160403_giantability_tv'
   },
 ];

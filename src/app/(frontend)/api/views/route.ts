@@ -3,12 +3,13 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { payload } from '@/lib/data'
 import { recordView, type ViewKind } from '@/lib/views'
 
-const KINDS: ViewKind[] = ['page', 'post', 'issue']
+const KINDS: ViewKind[] = ['page', 'post', 'issue', 'video']
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|headless|lighthouse|pingdom|uptime/i
 const WINDOW_SECONDS = 30 * 60
 
 /**
- * Records one view. Body: { kind: 'page' | 'post' | 'issue', id: string }.
+ * Records one view. Body: { kind: 'page' | 'post' | 'issue' | 'video', id: string }.
+ * A video "view" is a play started on the site (id = the YouTube video id).
  * The same visitor is only counted once per item every 30 minutes (cookie), and bots are ignored.
  */
 export async function POST(req: NextRequest) {
@@ -28,7 +29,9 @@ export async function POST(req: NextRequest) {
   if (kind === 'page' && (!id.startsWith('/') || id.startsWith('/admin') || id.startsWith('/api'))) {
     return new NextResponse(null, { status: 204 })
   }
-  if (kind !== 'page' && !/^\d+$/.test(id)) return new NextResponse(null, { status: 400 })
+  if (kind === 'video' ? !/^[\w-]{11}$/.test(id) : kind !== 'page' && !/^\d+$/.test(id)) {
+    return new NextResponse(null, { status: 400 })
+  }
 
   const cookieName = `gv_${kind}_${id.replace(/[^a-zA-Z0-9]/g, '_')}`.slice(0, 120)
   if (req.cookies.get(cookieName)) return new NextResponse(null, { status: 204 })

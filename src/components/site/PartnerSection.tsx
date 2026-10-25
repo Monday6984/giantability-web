@@ -47,7 +47,7 @@ export function PartnerSection({
             <h2 id="ways-h" className="display h-l">
               Ways to work with us
             </h2>
-            <div className="ways">
+            <div className="partner-ways">
               {cards.map((w) => (
                 <div key={w.type} className="way">
                   <h3 className="h-m" style={{ fontSize: 26 }}>

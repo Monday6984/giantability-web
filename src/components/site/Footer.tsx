@@ -33,6 +33,7 @@ export async function Footer() {
         <nav aria-label="Footer">
           <Link href="/blog">Blog</Link>
           <Link href="/magazine">Magazine</Link>
+          <Link href="/tv">Giantability TV</Link>
           <Link href="/partner">Partner with us</Link>
           <a href="/rss.xml">RSS</a>
           {(settings.social ?? []).map((s) => (

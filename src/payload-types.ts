@@ -103,9 +103,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
+    'tv-cache': TvCache;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'tv-cache': TvCacheSelect<false> | TvCacheSelect<true>;
   };
   locale: null;
   widgets: {
@@ -305,7 +307,7 @@ export interface Issue {
     | {
         section: string;
         /**
-         * The PDF's own page number. If the PDF is laid out as two-page spreads, each spread counts as one page.
+         * The page number printed in the magazine (the cover is page 1). Works the same whether the PDF has single pages or two-page spreads.
          */
         page: number;
         id?: string | null;
@@ -414,11 +416,11 @@ export interface User {
 export interface DailyView {
   id: number;
   /**
-   * page, post or issue
+   * page, post, issue or video (a play started on the site)
    */
   kind: string;
   /**
-   * Page path, or the post / issue id
+   * Page path, the post / issue id, or the YouTube video id
    */
   docId: string;
   /**
@@ -842,6 +844,12 @@ export interface SiteSetting {
    */
   weeklyDigest?: boolean | null;
   /**
+   * The Giantability TV page and the homepage strip show the newest videos from this channel automatically (refreshed about every hour).
+   */
+  youtubeChannel?: string | null;
+  youtubeChannelId?: string | null;
+  tvOnHomepage?: boolean | null;
+  /**
    * Shown in the footer of every page and on the Partner page.
    */
   contactEmail?: string | null;
@@ -871,6 +879,26 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tv-cache".
+ */
+export interface TvCache {
+  id: number;
+  channelId?: string | null;
+  videos?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  savedAt?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -914,6 +942,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   weeklyDigest?: T;
+  youtubeChannel?: T;
+  youtubeChannelId?: T;
+  tvOnHomepage?: T;
   contactEmail?: T;
   phones?:
     | T
@@ -929,6 +960,18 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tv-cache_select".
+ */
+export interface TvCacheSelect<T extends boolean = true> {
+  channelId?: T;
+  videos?: T;
+  savedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

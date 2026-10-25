@@ -8,13 +8,14 @@ const links = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Blog' },
   { href: '/magazine', label: 'Magazine' },
+  { href: '/tv', label: 'Giantability TV' },
   { href: '/partner', label: 'Partner with us' },
 ]
 
 export function Header() {
   const path = usePathname()
   const [open, setOpen] = useState(false)
-  const dark = path.startsWith('/magazine')
+  const dark = path.startsWith('/magazine') || path.startsWith('/tv')
   const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href))
   const cta = path.startsWith('/partner')
     ? { href: '#enquire', label: 'Start a conversation' }

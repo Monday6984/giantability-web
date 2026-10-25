@@ -16,6 +16,7 @@ import { Posts } from './collections/Posts'
 import { Subscribers } from './collections/Subscribers'
 import { Users } from './collections/Users'
 import { SiteSettings } from './globals/SiteSettings'
+import { TvCache } from './globals/TvCache'
 import { loadDefaults } from './lib/defaults'
 import { migrations } from './migrations'
 
@@ -45,7 +46,7 @@ export default buildConfig({
     },
   },
   collections: [Posts, Issues, Categories, Authors, Media, Enquiries, Subscribers, Users, DailyViews],
-  globals: [SiteSettings],
+  globals: [SiteSettings, TvCache],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },

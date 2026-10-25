@@ -8,6 +8,7 @@ import {
   getViewTotals,
   getViewsInPeriod,
 } from '@/lib/views'
+import { getVideos } from '@/lib/youtube'
 
 const fmt = (n: number) => n.toLocaleString('en-GB')
 
@@ -71,6 +72,13 @@ export async function Overview() {
     payload.count({ collection: 'subscribers', where: { active: { equals: true } } }),
     payload.count({ collection: 'subscribers', where: { and: [{ active: { equals: true } }, { createdAt: { greater_than: monthAgo } }] } }),
   ])
+  const [videoPlays, videoPlaysPrev, topVideoIds, tv] = await Promise.all([
+    getViewsInPeriod(payload, 'video', 30),
+    getViewsInPeriod(payload, 'video', 30, 30),
+    getTopViewed(payload, 'video', 30, 6),
+    getVideos(payload).catch(() => ({ videos: [] as { id: string; title: string }[] })),
+  ])
+  const videoTitle = new Map(tv.videos.map((v) => [v.id, v.title]))
   const issue = latestIssue.docs[0]
   const issueReads = issue ? ((await getViewTotals(payload, 'issue', [issue.id])).get(String(issue.id)) ?? 0) : 0
 
@@ -110,6 +118,11 @@ export async function Overview() {
           <p style={label}>Magazine reads · current issue</p>
           <p style={big}>{fmt(issueReads)}</p>
           <p style={label}>{issue ? `Issue ${issue.issueNumber}: ${issue.title}` : 'No issue released yet'}</p>
+        </div>
+        <div style={card}>
+          <p style={label}>Video plays · Giantability TV</p>
+          <p style={big}>{fmt(videoPlays)}</p>
+          <p style={label}>{change(videoPlays, videoPlaysPrev)}</p>
         </div>
         <a href="/admin/collections/enquiries?where[status][equals]=new" style={{ ...card, textDecoration: 'none', color: 'inherit' }}>
           <p style={label}>New enquiries</p>
@@ -219,6 +232,39 @@ export async function Overview() {
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <div style={card}>
+        <p style={{ ...label, fontWeight: 600, color: 'var(--theme-text)', fontSize: 15, marginBottom: 8 }}>
+          Top videos · plays started on the website
+        </p>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th style={th}>Video</th>
+                <th style={{ ...th, textAlign: 'right' }}>Plays</th>
+              </tr>
+            </thead>
+            <tbody>
+              {topVideoIds.length === 0 && (
+                <tr>
+                  <td style={td} colSpan={2}>No video plays recorded yet.</td>
+                </tr>
+              )}
+              {topVideoIds.map((v) => (
+                <tr key={v.docId}>
+                  <td style={td}>
+                    <a href={`https://www.youtube.com/watch?v=${v.docId}`} target="_blank" rel="noreferrer">
+                      {videoTitle.get(v.docId) ?? v.docId}
+                    </a>
+                  </td>
+                  <td style={{ ...td, textAlign: 'right' }}>{fmt(v.total)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 

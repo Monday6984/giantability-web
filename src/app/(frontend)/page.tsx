@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { AdSlot } from '@/components/site/AdSlot'
 import { PostCard } from '@/components/site/PostCard'
 import { SubscribeForm } from '@/components/site/SubscribeForm'
+import { TvStrip } from '@/components/site/TvStrip'
 import { formatDate, getIssues, getPosts, getSettings, mediaUrl, payload, type PostWithViews } from '@/lib/data'
 import { getViewTotals } from '@/lib/views'
 
@@ -97,6 +98,8 @@ export default async function HomePage() {
       <div className="wrap" style={{ paddingBottom: 56 }}>
         <AdSlot placement="home" />
       </div>
+
+      <TvStrip />
 
       {issue && (
         <section aria-labelledby="mag-h" className="mag-band">

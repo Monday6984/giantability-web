@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
-export const track = (kind: 'page' | 'post' | 'issue', id: string) => {
+export const track = (kind: 'page' | 'post' | 'issue' | 'video', id: string) => {
   const body = JSON.stringify({ kind, id })
   // sendBeacon survives the visitor leaving the page; fetch is the fallback.
   if (navigator.sendBeacon?.('/api/views', new Blob([body], { type: 'application/json' }))) return

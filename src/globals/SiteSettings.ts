@@ -1,7 +1,8 @@
-import type { GlobalConfig } from 'payload'
+import { ValidationError, type GlobalConfig } from 'payload'
 
 import { anyone, isLoggedIn } from '../access'
 import { revalidateAll } from '../lib/revalidate'
+import { resolveChannelId } from '../lib/youtube'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -178,6 +179,34 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
+          label: 'Giantability TV',
+          fields: [
+            {
+              name: 'youtubeChannel',
+              label: 'YouTube channel link',
+              type: 'text',
+              defaultValue: 'https://www.youtube.com/@Giantability',
+              admin: {
+                description:
+                  'The Giantability TV page and the homepage strip show the newest videos from this channel automatically (refreshed about every hour).',
+              },
+            },
+            {
+              // Worked out from the link when it is saved (YouTube's video feed needs the channel's ID).
+              name: 'youtubeChannelId',
+              type: 'text',
+              defaultValue: 'UCTA9_aY4ehU7lkq3nSi2dBw',
+              admin: { hidden: true },
+            },
+            {
+              name: 'tvOnHomepage',
+              label: 'Show the newest videos on the homepage',
+              type: 'checkbox',
+              defaultValue: true,
+            },
+          ],
+        },
+        {
           label: 'Contact & social',
           fields: [
             {
@@ -220,6 +249,28 @@ export const SiteSettings: GlobalConfig = {
     },
   ],
   hooks: {
+    beforeChange: [
+      // A new channel link: look up its channel ID once, here, so the site can read its video feed.
+      async ({ data, originalDoc, req }) => {
+        const link = typeof data.youtubeChannel === 'string' ? data.youtubeChannel.trim() : ''
+        if (!link) return { ...data, youtubeChannel: '', youtubeChannelId: '' }
+        if (link === originalDoc?.youtubeChannel && originalDoc?.youtubeChannelId) return data
+        const id = await resolveChannelId(link)
+        if (!id) {
+          throw new ValidationError({
+            global: 'site-settings',
+            req,
+            errors: [
+              {
+                path: 'youtubeChannel',
+                message: "Couldn't find that YouTube channel. Paste the channel's link, e.g. https://www.youtube.com/@Giantability",
+              },
+            ],
+          })
+        }
+        return { ...data, youtubeChannel: link, youtubeChannelId: id }
+      },
+    ],
     afterChange: [() => revalidateAll()],
   },
 }
