@@ -15,8 +15,8 @@ export async function Footer() {
       <div className="wrap">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/gmn-logo-white.png" alt="Giantability Media Networks" width={90} height={60} style={{ height: 60, width: 'auto', alignSelf: 'flex-start' }} />
-          <span style={{ fontSize: 14 }}>Giantability Media Networks · © {new Date().getFullYear()}</span>
+          <img src="/brand/gmn-logo-white.png" alt="Giantability Media Network" width={90} height={60} style={{ height: 60, width: 'auto', alignSelf: 'flex-start' }} />
+          <span style={{ fontSize: 14 }}>Giantability Media Network · © {new Date().getFullYear()}</span>
         </div>
         {(settings.contactEmail || settings.phones?.length) && (
           <address className="footer-contact">

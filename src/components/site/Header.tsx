@@ -37,7 +37,7 @@ export function Header() {
   return (
     <header className={`site-header${dark ? ' dark' : ''}${open ? ' menu-open' : ''}`}>
       <div className="wrap">
-        <Link href="/" className="brand" aria-label="Giantability Media Networks, home">
+        <Link href="/" className="brand" aria-label="Giantability Media Network, home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="brand-logo"
@@ -48,7 +48,7 @@ export function Header() {
           />
           <span className="brand-words" aria-hidden="true">
             <span className="brand-name">Giantability</span>
-            <span className="brand-sub">Media Networks</span>
+            <span className="brand-sub">Media Network</span>
           </span>
         </Link>
 

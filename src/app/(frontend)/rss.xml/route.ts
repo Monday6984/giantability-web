@@ -22,9 +22,9 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-  <title>Giantability Media Networks</title>
+  <title>Giantability Media Network</title>
   <link>${site}</link>
-  <description>New posts every week from Giantability Media Networks.</description>
+  <description>New posts every week from Giantability Media Network.</description>
   <language>en</language>
 ${items}
 </channel>

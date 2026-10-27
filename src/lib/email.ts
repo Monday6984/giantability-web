@@ -48,9 +48,9 @@ export const sendBatch = (emails: Email[]) => (emails.length ? resend('/emails/b
 export const layout = (inner: string) => `<!doctype html><html><body style="margin:0;background:#F4F5F7;font-family:Arial,Helvetica,sans-serif;color:#111318">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 16px">
 <table role="presentation" width="100%" style="max-width:560px;background:#FFFFFF;border-radius:12px" cellpadding="0" cellspacing="0">
-<tr><td style="padding:24px 32px 0"><img src="${siteUrl()}/brand/gmn-logo.png" alt="Giantability Media Networks" width="84" height="56" style="display:block;border:0"></td></tr>
+<tr><td style="padding:24px 32px 0"><img src="${siteUrl()}/brand/gmn-logo.png" alt="Giantability Media Network" width="84" height="56" style="display:block;border:0"></td></tr>
 <tr><td style="padding:16px 32px 32px;font-size:16px;line-height:1.6">${inner}</td></tr></table>
-<p style="font-size:12px;color:#5A5F6B">Giantability Media Networks</p></td></tr></table></body></html>`
+<p style="font-size:12px;color:#5A5F6B">Giantability Media Network</p></td></tr></table></body></html>`
 
 export async function sendEnquiryAlert(doc: {
   id: string | number

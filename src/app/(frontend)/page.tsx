@@ -55,7 +55,7 @@ export default async function HomePage() {
       ) : (
         <section className="wrap hero">
           <div className="hero-copy">
-            <h1 className="display h-xl">Giantability Media Networks</h1>
+            <h1 className="display h-xl">Giantability Media Network</h1>
             <p className="standfirst">The first weekly post is on its way.</p>
           </div>
         </section>

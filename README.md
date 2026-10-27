@@ -1,6 +1,6 @@
-# Giantability Media Networks
+# Giantability Media Network
 
-The website and admin for Giantability Media Networks: a weekly blog, an online magazine reader, a partnerships page, and an admin dashboard with built-in view tracking.
+The website and admin for Giantability Media Network: a weekly blog, an online magazine reader, a partnerships page, and an admin dashboard with built-in view tracking.
 
 Built with **Next.js** and **Payload CMS** (the admin lives inside the same app at `/admin`), Postgres on **Neon**, files on **Cloudflare R2**, and email through **Resend**. Every service runs on its free plan.
 

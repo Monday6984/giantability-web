@@ -4,7 +4,7 @@ import { BlogList } from '@/components/site/BlogList'
 
 export const metadata: Metadata = {
   title: 'Blog',
-  description: 'New posts every week from Giantability Media Networks.',
+  description: 'New posts every week from Giantability Media Network.',
 }
 
 export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string }> }) {

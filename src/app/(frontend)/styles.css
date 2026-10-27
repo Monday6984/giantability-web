@@ -1,4 +1,4 @@
-/* Giantability Media Networks — site styles (from the approved concept) */
+/* Giantability Media Network — site styles (from the approved concept) */
 
 :root {
   --ink: #111318;
@@ -317,8 +317,18 @@ a:hover {
   .site-header .wrap {
     flex-wrap: nowrap;
   }
+  .brand {
+    gap: 10px;
+  }
   .brand-words {
-    display: none;
+    padding-left: 10px;
+  }
+  .brand-name {
+    font-size: 16px;
+  }
+  .brand-sub {
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
   }
   .brand-logo {
     height: 44px;

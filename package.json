@@ -1,7 +1,7 @@
 {
   "name": "giantability-web",
   "version": "1.0.0",
-  "description": "Giantability Media Networks website and admin (Next.js + Payload CMS)",
+  "description": "Giantability Media Network website and admin (Next.js + Payload CMS)",
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {

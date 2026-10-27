@@ -68,7 +68,7 @@ export default async function PostPage({ params }: Props) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ fontWeight: 600 }}>{author?.name ?? 'Giantability'}</span>
                 <span className="muted" style={{ fontSize: 13 }}>
-                  {author?.role ?? 'Giantability Media Networks'}
+                  {author?.role ?? 'Giantability Media Network'}
                 </span>
               </div>
             </div>

@@ -7,7 +7,7 @@ export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Partner with us',
-  description: 'Partnership, collaboration and advertising with Giantability Media Networks.',
+  description: 'Partnership, collaboration and advertising with Giantability Media Network.',
 }
 
 export default async function PartnerPage() {
