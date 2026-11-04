@@ -997,9 +997,13 @@ a:hover {
   margin: 0 auto;
 }
 .prose figcaption {
-  margin-top: 8px;
+  margin: 8px auto 0;
+  max-width: 40em;
+  text-align: center;
+  text-wrap: balance;
   font-family: var(--font-body);
   font-size: 14px;
+  line-height: 1.45;
   color: var(--muted);
 }
 .tags {
